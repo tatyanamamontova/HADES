@@ -1,4 +1,4 @@
-ƒ//Alexander Zaytsev
+//Alexander Zaytsev
 //a.zaytsev@gsi.de
 //October 2016
 
@@ -173,15 +173,15 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Float_t rapidity_corr[maxNTracks];
     
     //variables for cuts
-    Bool_t trigger = kFALSE;
-    Bool_t vertexClust = kFALSE;
-    Bool_t vertexCand = kFALSE;
-    Bool_t goodSTART = kFALSE;
-    Bool_t noPileUpSTART = kFALSE;
-    Bool_t noVETO = kFALSE;
-    Bool_t goodSTARTVETO = kFALSE;
-    Bool_t goodSTARTMETA = kFALSE;
-    Bool_t isgoodEvent = kFALSE;
+    Bool_t trigger;
+    Bool_t vertexClust;
+    Bool_t vertexCand;
+    Bool_t goodSTART;
+    Bool_t noPileUpSTART;
+    Bool_t noVETO;
+    Bool_t goodSTARTVETO;
+    Bool_t goodSTARTMETA;
+    Bool_t isgoodEvent;
             
     TFile* out = new TFile(outfile.Data(),"RECREATE");
     out->cd();
@@ -302,6 +302,16 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         // summary event info object
         HParticleEvtInfo* evtInfo=0;
         evtInfo = HCategoryManager::getObject(evtInfo,evtInfoCat,0 );
+        
+        trigger = kFALSE;
+        vertexClust = kFALSE;
+        vertexCand = kFALSE;
+        goodSTART = kFALSE;
+        noPileUpSTART = kFALSE;
+        noVETO = kFALSE;
+        goodSTARTVETO = kFALSE;
+        goodSTARTMETA = kFALSE;
+        isgoodEvent = kFALSE;
 
         if (evtInfo->isGoodEvent(Particle::kGoodTRIGGER)) trigger = kTRUE;
         if (evtInfo->isGoodEvent(Particle::kGoodVertexClust)) vertexClust = kTRUE;
