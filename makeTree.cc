@@ -173,15 +173,15 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Float_t rapidity_corr[maxNTracks];
     
     //variables for cuts
-    Bool_t trigger;
-    Bool_t vertexClust;
-    Bool_t vertexCand;
-    Bool_t goodSTART;
-    Bool_t noPileUpSTART;
-    Bool_t noVETO;
-    Bool_t goodSTARTVETO;
-    Bool_t goodSTARTMETA;
-    Bool_t isgoodEvent;
+    Bool_t trigger = kFALSE;
+    Bool_t vertexClust = kFALSE;
+    Bool_t vertexCand = kFALSE;
+    Bool_t goodSTART = kFALSE;
+    Bool_t noPileUpSTART = kFALSE;
+    Bool_t noVETO = kFALSE;
+    Bool_t goodSTARTVETO = kFALSE;
+    Bool_t goodSTARTMETA = kFALSE;
+    Bool_t isgoodEvent = kFALSE;
             
     TFile* out = new TFile(outfile.Data(),"RECREATE");
     out->cd();
@@ -303,17 +303,17 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         HParticleEvtInfo* evtInfo=0;
         evtInfo = HCategoryManager::getObject(evtInfo,evtInfoCat,0 );
 
-        trigger = evtInfo->isGoodEvent(Particle::kGoodTRIGGER);
-        vertexClust = evtInfo->isGoodEvent(Particle::kGoodVertexClust);
-        vertexCand = evtInfo->isGoodEvent(Particle::kGoodVertexCand);
-        goodSTART = evtInfo->isGoodEvent(Particle::kGoodSTART);
-        noPileUpSTART = evtInfo->isGoodEvent(Particle::kNoPileUpSTART);
-        noVETO = evtInfo->isGoodEvent(Particle::kNoVETO);
-        goodSTARTVETO = evtInfo->isGoodEvent(Particle::kGoodSTARTVETO);
-        goodSTARTMETA = evtInfo->isGoodEvent(Particle::kGoodSTARTMETA);
+        if (evtInfo->isGoodEvent(Particle::kGoodTRIGGER)) trigger = kTRUE;
+        if (evtInfo->isGoodEvent(Particle::kGoodVertexClust)) vertexClust = kTRUE;
+        if (evtInfo->isGoodEvent(Particle::kGoodVertexCand)) vertexCand = kTRUE;
+        if (evtInfo->isGoodEvent(Particle::kGoodSTART)) goodSTART = kTRUE;
+        if (evtInfo->isGoodEvent(Particle::kNoPileUpSTART)) noPileUpSTART = kTRUE;
+        if (evtInfo->isGoodEvent(Particle::kNoVETO)) noVETO = kTRUE;
+        if (evtInfo->isGoodEvent(Particle::kGoodSTARTVETO)) goodSTARTVETO = kTRUE;
+        if (evtInfo->isGoodEvent(Particle::kGoodSTARTMETA)) goodSTARTMETA = kTRUE;
         
-        isgoodEvent = (trigger && vertexClust && vertexCand && goodSTART && noPileUpSTART 
-                                            && noVETO && goodSTARTMETA && goodSTARTVETO);
+        if (trigger || vertexClust || vertexCand || goodSTART || noPileUpSTART || noVETO || goodSTARTMETA || goodSTARTVETO)
+            isgoodEvent = kTRUE;
 
 
         if ( evtInfo&&!evtInfo->isGoodEvent(Particle::kGoodTRIGGER|
@@ -629,3 +629,4 @@ int main(int argc, char **argv)
         return 1; // fail
     }
 }
+d
