@@ -253,15 +253,15 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("rapidity_corr",rapidity_corr,"rapidity_corr[nTracks]/F");
     
     //Cuts
-    tree->Branch("trigger",             trigger,            "trigger/O");
-    tree->Branch("vertexClust",         vertexClust,        "vertexClust/O");
-    tree->Branch("vertexCand",          vertexCand,         "vertexCand/O");
-    tree->Branch("goodSTART",           goodSTART,          "tgoodSTART/O");
-    tree->Branch("noPileUpSTART",       noPileUpSTART,      "noPileUpSTART/O");
-    tree->Branch("noVETO",              noVETO,             "noVETO/O");
-    tree->Branch("goodSTARTVETO",       goodSTARTVETO,      "goodSTARTVETO/O");
-    tree->Branch("goodSTARTMETA",       goodSTARTMETA,      "goodSTARTMETA/O");
-    tree->Branch("isgoodEvent",         isgoodEvent,        "isgoodEvent/O");
+    tree->Branch("trigger",             &trigger,            "trigger/O");
+    tree->Branch("vertexClust",         &vertexClust,        "vertexClust/O");
+    tree->Branch("vertexCand",          &vertexCand,         "vertexCand/O");
+    tree->Branch("goodSTART",           &goodSTART,          "tgoodSTART/O");
+    tree->Branch("noPileUpSTART",       &noPileUpSTART,      "noPileUpSTART/O");
+    tree->Branch("noVETO",              &noVETO,             "noVETO/O");
+    tree->Branch("goodSTARTVETO",       &goodSTARTVETO,      "goodSTARTVETO/O");
+    tree->Branch("goodSTARTMETA",       &goodSTARTMETA,      "goodSTARTMETA/O");
+    tree->Branch("isgoodEvent",         &isgoodEvent,        "isgoodEvent/O");
     
 
     //#######################################################################
@@ -302,7 +302,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         // summary event info object
         HParticleEvtInfo* evtInfo=0;
         evtInfo = HCategoryManager::getObject(evtInfo,evtInfoCat,0 );
-        
+
         trigger = kFALSE;
         vertexClust = kFALSE;
         vertexCand = kFALSE;
@@ -639,4 +639,3 @@ int main(int argc, char **argv)
         return 1; // fail
     }
 }
-d
