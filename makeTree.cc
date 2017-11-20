@@ -256,7 +256,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("trigger",             &trigger,            "trigger/O");
     tree->Branch("vertexClust",         &vertexClust,        "vertexClust/O");
     tree->Branch("vertexCand",          &vertexCand,         "vertexCand/O");
-    tree->Branch("goodSTART",           &goodSTART,          "tgoodSTART/O");
+    tree->Branch("goodSTART",           &goodSTART,          "goodSTART/O");
     tree->Branch("noPileUpSTART",       &noPileUpSTART,      "noPileUpSTART/O");
     tree->Branch("noVETO",              &noVETO,             "noVETO/O");
     tree->Branch("goodSTARTVETO",       &goodSTARTVETO,      "goodSTARTVETO/O");
@@ -316,7 +316,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
                                             && noVETO && goodSTARTMETA && goodSTARTVETO);
 
 
-        if ( evtInfo&&!evtInfo->isGoodEvent(Particle::kGoodTRIGGER|
+        /*if ( evtInfo&&!evtInfo->isGoodEvent(Particle::kGoodTRIGGER|
                                         Particle::kGoodVertexClust|
                                         Particle::kGoodVertexCand|
                                         Particle::kGoodSTART|
@@ -324,7 +324,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
                                         Particle::kNoVETO|
                                         Particle::kGoodSTARTVETO|
                                         Particle::kGoodSTARTMETA) ) continue;
-        
+        */
         
         //get primary vertex
         HVertex vertexReco = gHades->getCurrentEvent()->getHeader()->getVertexReco();
