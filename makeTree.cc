@@ -1,4 +1,4 @@
-//Alexander Zaytsev
+ƒ//Alexander Zaytsev
 //a.zaytsev@gsi.de
 //October 2016
 
@@ -172,7 +172,17 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Float_t pt_corr[maxNTracks];
     Float_t rapidity_corr[maxNTracks];
     
-    
+    //variables for cuts
+    Bool_t trigger;
+    Bool_t vertexClust;
+    Bool_t vertexCand;
+    Bool_t goodSTART;
+    Bool_t noPileUpSTART;
+    Bool_t noVETO;
+    Bool_t goodSTARTVETO;
+    Bool_t goodSTARTMETA;
+    Bool_t isgoodEvent;
+            
     TFile* out = new TFile(outfile.Data(),"RECREATE");
     out->cd();
 
@@ -242,8 +252,18 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("pt_corr",  pt_corr,  "pt_corr[nTracks]/F");
     tree->Branch("rapidity_corr",rapidity_corr,"rapidity_corr[nTracks]/F");
     
+    //Cuts
+    tree->Branch("trigger",             trigger,            "trigger/O");
+    tree->Branch("vertexClust",         vertexClust,        "vertexClust/O");
+    tree->Branch("vertexCand",          vertexCand,         "vertexCand/O");
+    tree->Branch("goodSTART",           goodSTART,          "tgoodSTART/O");
+    tree->Branch("noPileUpSTART",       noPileUpSTART,      "noPileUpSTART/O");
+    tree->Branch("noVETO",              noVETO,             "noVETO/O");
+    tree->Branch("goodSTARTVETO",       goodSTARTVETO,      "goodSTARTVETO/O");
+    tree->Branch("goodSTARTMETA",       goodSTARTMETA,      "goodSTARTMETA/O");
+    tree->Branch("isgoodEvent",         isgoodEvent,        "isgoodEvent/O");
     
-    
+
     //#######################################################################
     //#######################################################################
 
@@ -282,6 +302,19 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         // summary event info object
         HParticleEvtInfo* evtInfo=0;
         evtInfo = HCategoryManager::getObject(evtInfo,evtInfoCat,0 );
+
+        trigger = evtInfo->isGoodEvent(Particle::kGoodTRIGGER);
+        vertexClust = evtInfo->isGoodEvent(Particle::kGoodVertexClust);
+        vertexCand = evtInfo->isGoodEvent(Particle::kGoodVertexCand);
+        goodSTART = evtInfo->isGoodEvent(Particle::kGoodSTART);
+        noPileUpSTART = evtInfo->isGoodEvent(Particle::kNoPileUpSTART);
+        noVETO = evtInfo->isGoodEvent(Particle::kNoVETO);
+        goodSTARTVETO = evtInfo->isGoodEvent(Particle::kGoodSTARTVETO);
+        goodSTARTMETA = evtInfo->isGoodEvent(Particle::kGoodSTARTMETA);
+        
+        isgoodEvent = (trigger && vertexClust && vertexCand && goodSTART && noPileUpSTART 
+                                            && noVETO && goodSTARTMETA && goodSTARTVETO);
+
 
         if ( evtInfo&&!evtInfo->isGoodEvent(Particle::kGoodTRIGGER|
                                         Particle::kGoodVertexClust|
@@ -360,8 +393,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
             wallHitRing[j] = divider->GetRing(wallModuleIndex[j]);
             ring = wallHitRing[j];
             if (ring==-1) {
-            	cerr << "Error in short MHWallDivider::GetRing(short i="<<wallModuleIndex[j]<<"): it's returned -1" << endl;
-            	return 2;
+                cerr << "Error in short MHWallDivider::GetRing(short i="<<wallModuleIndex[j]<<"): it's returned -1" << endl;
+                return 2;
             }
             subevent = divider->GetSubEvent(wallModuleIndex[j]);
 
