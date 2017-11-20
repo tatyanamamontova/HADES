@@ -303,27 +303,17 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         HParticleEvtInfo* evtInfo=0;
         evtInfo = HCategoryManager::getObject(evtInfo,evtInfoCat,0 );
 
-        trigger = kFALSE;
-        vertexClust = kFALSE;
-        vertexCand = kFALSE;
-        goodSTART = kFALSE;
-        noPileUpSTART = kFALSE;
-        noVETO = kFALSE;
-        goodSTARTVETO = kFALSE;
-        goodSTARTMETA = kFALSE;
-        isgoodEvent = kFALSE;
-
-        if (evtInfo->isGoodEvent(Particle::kGoodTRIGGER)) trigger = kTRUE;
-        if (evtInfo->isGoodEvent(Particle::kGoodVertexClust)) vertexClust = kTRUE;
-        if (evtInfo->isGoodEvent(Particle::kGoodVertexCand)) vertexCand = kTRUE;
-        if (evtInfo->isGoodEvent(Particle::kGoodSTART)) goodSTART = kTRUE;
-        if (evtInfo->isGoodEvent(Particle::kNoPileUpSTART)) noPileUpSTART = kTRUE;
-        if (evtInfo->isGoodEvent(Particle::kNoVETO)) noVETO = kTRUE;
-        if (evtInfo->isGoodEvent(Particle::kGoodSTARTVETO)) goodSTARTVETO = kTRUE;
-        if (evtInfo->isGoodEvent(Particle::kGoodSTARTMETA)) goodSTARTMETA = kTRUE;
+        trigger = evtInfo->isGoodEvent(Particle::kGoodTRIGGER);
+        vertexClust = evtInfo->isGoodEvent(Particle::kGoodVertexClust);
+        vertexCand = evtInfo->isGoodEvent(Particle::kGoodVertexCand);
+        goodSTART = evtInfo->isGoodEvent(Particle::kGoodSTART);
+        noPileUpSTART = evtInfo->isGoodEvent(Particle::kNoPileUpSTART);
+        noVETO = evtInfo->isGoodEvent(Particle::kNoVETO);
+        goodSTARTVETO = evtInfo->isGoodEvent(Particle::kGoodSTARTVETO);
+        goodSTARTMETA = evtInfo->isGoodEvent(Particle::kGoodSTARTMETA);
         
-        if (trigger || vertexClust || vertexCand || goodSTART || noPileUpSTART || noVETO || goodSTARTMETA || goodSTARTVETO)
-            isgoodEvent = kTRUE;
+        isgoodEvent = (trigger && vertexClust && vertexCand && goodSTART && noPileUpSTART 
+                                            && noVETO && goodSTARTMETA && goodSTARTVETO);
 
 
         if ( evtInfo&&!evtInfo->isGoodEvent(Particle::kGoodTRIGGER|
