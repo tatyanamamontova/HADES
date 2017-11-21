@@ -42,7 +42,7 @@ const Float_t Y_BEAM = 0.740151;  //beam rapidity for 1.23GeV/c nucleon
 //  outfile    : optional (not used here) , used to store hists in root file
 //  nEvents    : number of events to processed. if  nEvents < entries or < 0 the chain will be processed
 
-Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
+Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runNumber)
 {
     Bool_t isSimulation = kFALSE;
 
@@ -101,6 +101,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     //   ##   ## ##   ##     ##
     //   ##   ##  ##  #####  #####
     //-----------------------------------------------------------------------
+    const Int_t nRun;                        //number of run
     const Short_t nWallSubEvents = 6;        //number of FW subevents
     const Short_t nWallRandomSubEvents = 10; //number of random FW subevents
     const Short_t nMdcSubEvents = 3;         //number of MDC subevents 
@@ -125,6 +126,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Float_t wallHitDistance[maxNWallHits];   //distance to FW module
     Short_t wallHitRing[maxNWallHits];       //wall ring of a hit
     Float_t wallHitPhi[maxNWallHits];        //phi angle of hit module in rad
+    Float_t wallHitEta[maxNWallHits];        //eta of FW hit
     Bool_t  isWallHitOk[maxNWallHits];       //output of hit cuts
     
     //MDC
@@ -188,6 +190,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
 
     TTree* tree = new TTree("tree", "HADES Au+Au 1.23 GeV 8gen tree for flow analysis");
     
+    tree->Branch("nRun",          &nRun,          "nRun/I");
     tree->Branch("nWallHitsTot",  &nWallHitsTot,  "nWallHitsTot/S");
     tree->Branch("wallQx",        wallQx,         "wallQx[6][2]/F");     
     tree->Branch("wallQy",        wallQy,         "wallQy[6][2]/F");
@@ -206,6 +209,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("wallHitDistance", wallHitDistance, "wallHitDistance[nWallHitsTot]/F");
     tree->Branch("wallHitRing",     wallHitRing,     "wallHitRing[nWallHitsTot]/S");
     tree->Branch("wallHitPhi",      wallHitPhi,      "wallHitPhi[nWallHitsTot]/F");
+    tree->Branch("wallHitEta",      wallHitEta,      "wallHitEta[nWallHitsTot]/F");
     tree->Branch("isWallHitOk",     isWallHitOk,     "isWallHitOk[nWallHitsTot]/O");
      
     //MDC 
@@ -281,6 +285,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     MHWallDivider* divider = new MHWallDivider();
     TRandom2 *randomGenerator = new TRandom2();
     Float_t rndm;
+    nRun = runNumber;
+
 
     for (Int_t i = 0; i < entries; i++) {
         Int_t nbytes =  loop.nextEvent(i);             // get next event. categories will be cleared before
@@ -378,9 +384,11 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         Float_t psi;
         Short_t randomSubEvent;
         Float_t hit_beta;
+        Float_t thetaFW;
         //for A.Sadovsky method:
         Int_t nA = 0;
         Int_t nB = 0;
+
         
         for(Short_t j=0; j<nWallHitsTot; j++) {
             wallHit = HCategoryManager::getObject(wallHit,wallCat,j);
@@ -403,6 +411,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
             psi = wallHit->getPhi() * D2R;
             wallHitPhi[j] = psi;
             
+            thetaFW = wallHit->getTheta();
+            wallHitEta[j] = -TMath::Log(TMath::Tan(thetaFW/2));
             //cuts by B.Kardan
             hit_beta = wallHitDistance[j]/wallHitTime[j]/299.792458;
             if ( (ring<=4            && wallHitCharge[j]>80 && hit_beta>0.84 && hit_beta<1.) ||
