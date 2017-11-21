@@ -101,7 +101,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
     //   ##   ## ##   ##     ##
     //   ##   ##  ##  #####  #####
     //-----------------------------------------------------------------------
-    const Int_t nRun;                        //number of run
+    Int_t nRun;                        //number of run
     const Short_t nWallSubEvents = 6;        //number of FW subevents
     const Short_t nWallRandomSubEvents = 10; //number of random FW subevents
     const Short_t nMdcSubEvents = 3;         //number of MDC subevents 
@@ -285,7 +285,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
     MHWallDivider* divider = new MHWallDivider();
     TRandom2 *randomGenerator = new TRandom2();
     Float_t rndm;
-    nRun = runNumber;
+    
 
 
     for (Int_t i = 0; i < entries; i++) {
@@ -303,6 +303,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
             HTime::splitFileName(filename,*be,g,day,hour,minute,g,g,kFALSE);
             time = day*24*60 + hour*24 + minute;
         }
+        
+        nRun = runNumber;
         
         //-------------------------------------------------
         // summary event info object
