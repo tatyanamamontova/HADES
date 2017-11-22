@@ -26,7 +26,7 @@ else
     maxNumberOfRuns=${2}
 fi
 
-bash ./make.sh
+bash make.sh
 
 if [ ! -d $outputdir ]
 then
