@@ -1,6 +1,6 @@
-//Alexander Zaytsev
+//Alexander Zaytsev, Elizaveta Zherebtsova, Tatiana Mamontova
 //a.zaytsev@gsi.de
-//October 2016
+//October 2016, November 2017
 
 #include "hades.h"
 #include "hloop.h"
@@ -13,7 +13,6 @@
 #include "hparticletool.h"
 #include "hparticledef.h"
 #include "hparticleevtinfo.h"
-//#include "hparticleevtchara.h"
 #include "henergylosscorrpar.h"
 #include "hphysicsconstants.h"
 #include "hwallhit.h"
@@ -42,7 +41,7 @@ const Float_t Y_BEAM = 0.740151;  //beam rapidity for 1.23GeV/c nucleon
 //  outfile    : optional (not used here) , used to store hists in root file
 //  nEvents    : number of events to processed. if  nEvents < entries or < 0 the chain will be processed
 
-Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runNumber)
+Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
 {
     Bool_t isSimulation = kFALSE;
 
@@ -51,7 +50,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
 
     // list of all files with working sectors
     if(!isSimulation) loop.readSectorFileList("/lustre/nyx/hades/dst/apr12/gen8/sector_selection/FileListHadron.list",kFALSE,kFALSE);
-
+//if(!isSimulation) loop.readSectorFileList("/lustre/nyx/cbm/users/ogolosov/HADES/treeMaker/src/list_gen109_day108.txt",kFALSE,kFALSE);
     // reading input files and declaring containers
     Bool_t ret = kFALSE;
     if(infileList.Contains(",")){
@@ -82,14 +81,6 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
     HCategory* candCat    = (HCategory*)HCategoryManager::getCategory(catParticleCand);
     HCategory* evtInfoCat = (HCategory*)HCategoryManager::getCategory(catParticleEvtInfo);
     HCategory* wallCat    = (HCategory*)HCategoryManager::getCategory(catWallHit);
-
-    /*//evtchara setup for cetrality determintaion 
-    HParticleEvtChara evtChara;
-    evtChara.setBeamTime("apr12");
-    evtChara.setGeneration("gen8");
-    evtChara.useEstimator("SelcTrackCorr");
-    evtChara.init();
-    evtChara.printCentralityClass();   */ 
     
     
     //#######################################################################
@@ -101,22 +92,26 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
     //   ##   ## ##   ##     ##
     //   ##   ##  ##  #####  #####
     //-----------------------------------------------------------------------
-    Int_t nRun;                        //number of run
+   
+
+
+    const Short_t nRings = 9;                // number of rings in FW
     const Short_t nWallSubEvents = 6;        //number of FW subevents
     const Short_t nWallRandomSubEvents = 10; //number of random FW subevents
     const Short_t nMdcSubEvents = 3;         //number of MDC subevents 
     const Short_t nHarmonics = 2;            //number of harmonics for q-vectors
     Short_t nWallHitsTot;                    //total number of FW hits
 
-    Float_t wallQx[nWallSubEvents][nHarmonics];  //Q vector x component of FW subevent
-    Float_t wallQy[nWallSubEvents][nHarmonics];  //Q vector y component of FW subevent
-    Float_t wallQw[nWallSubEvents];              //weight of Q-vector
-    Float_t wallQxRandom[nWallRandomSubEvents][nHarmonics];  //Q vector x component of random FW subevent
-    Float_t wallQyRandom[nWallRandomSubEvents][nHarmonics];  //Q vector y component of random FW subevent
-    Float_t wallQwRandom[nWallRandomSubEvents];              //weight of Q-vector
-    Float_t mdcQx[nMdcSubEvents][nHarmonics];  //Q vector x component of MDC subevent
-    Float_t mdcQy[nMdcSubEvents][nHarmonics];  //Q vector y component of MDC subevent
-    Float_t mdcQw[nMdcSubEvents];              //weight of Q-vector
+
+    //Hits
+    Int_t nRpcClust;                         //number of RPC hits   
+    Int_t nRpcClustCut;                      //number of RPC hits with time cut
+    Int_t nTofHits;                          //number of TOF hits
+    Int_t nTofHitsCut;                       //number of TOF hits with time cut
+    Int_t primaryTracks;                     //number of primary tracks
+    Int_t selectedTracks;                    //number of selected tracks
+    Short_t trigInd;                         //type of trigger
+    Short_t runId;                           //run number
     
     //FW hits
     const Short_t maxNWallHits = 200;        //maximal number of FW hits
@@ -126,8 +121,11 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
     Float_t wallHitDistance[maxNWallHits];   //distance to FW module
     Short_t wallHitRing[maxNWallHits];       //wall ring of a hit
     Float_t wallHitPhi[maxNWallHits];        //phi angle of hit module in rad
-    Float_t wallHitEta[maxNWallHits];        //eta of FW hit
     Bool_t  isWallHitOk[maxNWallHits];       //output of hit cuts
+    Float_t wallChargeTot;                   //total charge FW
+    Float_t wallChargeTot_ring[nRings];      //FW rings charges (1-9)
+
+
     
     //MDC
     Short_t nTracks = 0;    //number of all tracks in MDC
@@ -140,14 +138,19 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
     Float_t vY;      //y coordinate of primary vertex
     Float_t vZ;      //z coordinate of primary vertex
     Float_t vChi2;   //vertex reconstruction chi^2 
-
-    //centrality
-    Float_t centralityMdc;
-    Float_t centralityTofRpc;
-    Float_t centralityWallCharge;
     
     //Time
     Int_t time;
+
+    //Cuts
+    Bool_t trigger;
+    Bool_t vertexClust;
+    Bool_t vertexCand;
+    Bool_t goodSTART;
+    Bool_t noPileUpSTART;
+    Bool_t noVETO;
+    Bool_t goodSTARTVETO;
+    Bool_t goodSTARTMETA;
 
     //tracks
     const Short_t maxNTracks = 200;
@@ -174,43 +177,45 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
     Float_t pt_corr[maxNTracks];
     Float_t rapidity_corr[maxNTracks];
     
-    //variables for cuts
-    Bool_t trigger;
-    Bool_t vertexClust;
-    Bool_t vertexCand;
-    Bool_t goodSTART;
-    Bool_t noPileUpSTART;
-    Bool_t noVETO;
-    Bool_t goodSTARTVETO;
-    Bool_t goodSTARTMETA;
-    Bool_t isgoodEvent;
-            
+    
     TFile* out = new TFile(outfile.Data(),"RECREATE");
     out->cd();
 
     TTree* tree = new TTree("tree", "HADES Au+Au 1.23 GeV 8gen tree for flow analysis");
     
-    tree->Branch("nRun",          &nRun,          "nRun/I");
-    tree->Branch("nWallHitsTot",  &nWallHitsTot,  "nWallHitsTot/S");
-    tree->Branch("wallQx",        wallQx,         "wallQx[6][2]/F");     
-    tree->Branch("wallQy",        wallQy,         "wallQy[6][2]/F");
-    tree->Branch("wallQw",        wallQw,         "wallQw[6]/F");
-    tree->Branch("wallQxRandom",  wallQxRandom,   "wallQxRandom[10][2]/F");     
-    tree->Branch("wallQyRandom",  wallQyRandom,   "wallQyRandom[10][2]/F");
-    tree->Branch("wallQwRandom",  wallQwRandom,   "wallQwRandom[10]/F");
-    tree->Branch("mdcQx",  mdcQx,   "mdcQx[3][2]/F");     
-    tree->Branch("mdcQy",  mdcQy,   "mdcQy[3][2]/F");
-    tree->Branch("mdcQw",  mdcQw,   "mdcQw[3]/F");    
+
+    tree->Branch("nRpcClust",          &nRpcClust,         "nRpcClust/I");
+    tree->Branch("nRpcClustCut",       &nRpcClustCut,      "nRpcClustCut/I");
+    tree->Branch("nTofHits",           &nTofHits,          "nTofHits/I");
+    tree->Branch("nTofHitsCut",        &nTofHitsCut,       "nTofHitsCut/I");
+    tree->Branch("primaryTracks",      &primaryTracks,     "primaryTracks/I");
+    tree->Branch("selectedTracks",     &selectedTracks,    "selectedTracks/I");
+    tree->Branch("trigInd",            &trigInd,           "trigInd/S");
+    tree->Branch("runId",              &runId,             "runId/S");
+
+
+
+    tree->Branch("trigger",             &trigger,            "trigger/O");
+    tree->Branch("vertexClust",         &vertexClust,        "vertexClust/O");
+    tree->Branch("vertexCand",          &vertexCand,         "vertexCand/O");
+    tree->Branch("goodSTART",           &goodSTART,          "goodSTART/O");
+    tree->Branch("noPileUpSTART",       &noPileUpSTART,      "noPileUpSTART/O");
+    tree->Branch("noVETO",              &noVETO,             "noVETO/O");
+    tree->Branch("goodSTARTVETO",       &goodSTARTVETO,      "goodSTARTVETO/O");
+    tree->Branch("goodSTARTMETA",       &goodSTARTMETA,      "goodSTARTMETA/O");
+
     
-    //FW hits
-    tree->Branch("wallModuleIndex", wallModuleIndex, "wallModuleIndex[nWallHitsTot]/S");
-    tree->Branch("wallHitTime",     wallHitTime,     "wallHitTime[nWallHitsTot]/F");  
-    tree->Branch("wallHitCharge",   wallHitCharge,   "wallHitCharge[nWallHitsTot]/F");
-    tree->Branch("wallHitDistance", wallHitDistance, "wallHitDistance[nWallHitsTot]/F");
-    tree->Branch("wallHitRing",     wallHitRing,     "wallHitRing[nWallHitsTot]/S");
-    tree->Branch("wallHitPhi",      wallHitPhi,      "wallHitPhi[nWallHitsTot]/F");
-    tree->Branch("wallHitEta",      wallHitEta,      "wallHitEta[nWallHitsTot]/F");
-    tree->Branch("isWallHitOk",     isWallHitOk,     "isWallHitOk[nWallHitsTot]/O");
+    //FW Hits
+    tree->Branch("wallModuleIndex",     wallModuleIndex,        "wallModuleIndex[nWallHitsTot]/S");
+    tree->Branch("wallHitTime",         wallHitTime,            "wallHitTime[nWallHitsTot]/F");  
+    tree->Branch("wallHitCharge",       wallHitCharge,          "wallHitCharge[nWallHitsTot]/F");
+    tree->Branch("wallHitDistance",     wallHitDistance,        "wallHitDistance[nWallHitsTot]/F");
+    tree->Branch("wallHitRing",         wallHitRing,            "wallHitRing[nWallHitsTot]/S");
+    tree->Branch("wallHitPhi",          wallHitPhi,             "wallHitPhi[nWallHitsTot]/F");
+    tree->Branch("isWallHitOk",         isWallHitOk,            "isWallHitOk[nWallHitsTot]/O");
+    tree->Branch("wallChargeTot",       &wallChargeTot,         "wallChargeTot/F");
+    tree->Branch("wallChargeTot_ring",  wallChargeTot_ring,     "wallChargeTot_ring[nRings]/F");
+
      
     //MDC 
     tree->Branch("nTracks",  &nTracks,  "nTracks/S"); 
@@ -223,11 +228,6 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
     tree->Branch("vY",    &vY,    "vY/F");   
     tree->Branch("vZ",    &vZ,    "vZ/F");   
     tree->Branch("vChi2", &vChi2, "vChi2/F");
-    
-    //Centrality    
-    tree->Branch("centralityMdc",  &centralityMdc,  "centralityMdc/F");
-    tree->Branch("centralityTofRpc",  &centralityTofRpc,  "centralityTofRpc/F");
-    tree->Branch("centralityWallCharge", &centralityWallCharge, "centralityWallCharge/F");
     
     //Time
     tree->Branch("time", &time, "time/I");
@@ -256,18 +256,9 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
     tree->Branch("pt_corr",  pt_corr,  "pt_corr[nTracks]/F");
     tree->Branch("rapidity_corr",rapidity_corr,"rapidity_corr[nTracks]/F");
     
-    //Cuts
-    tree->Branch("trigger",             &trigger,            "trigger/O");
-    tree->Branch("vertexClust",         &vertexClust,        "vertexClust/O");
-    tree->Branch("vertexCand",          &vertexCand,         "vertexCand/O");
-    tree->Branch("goodSTART",           &goodSTART,          "goodSTART/O");
-    tree->Branch("noPileUpSTART",       &noPileUpSTART,      "noPileUpSTART/O");
-    tree->Branch("noVETO",              &noVETO,             "noVETO/O");
-    tree->Branch("goodSTARTVETO",       &goodSTARTVETO,      "goodSTARTVETO/O");
-    tree->Branch("goodSTARTMETA",       &goodSTARTMETA,      "goodSTARTMETA/O");
-    tree->Branch("isgoodEvent",         &isgoodEvent,        "isgoodEvent/O");
     
-
+    
+    
     //#######################################################################
     //#######################################################################
 
@@ -286,7 +277,6 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
     TRandom2 *randomGenerator = new TRandom2();
     Float_t rndm;
 
-
     for (Int_t i = 0; i < entries; i++) {
         Int_t nbytes =  loop.nextEvent(i);             // get next event. categories will be cleared before
         if(nbytes <= 0) { cout<<nbytes<<endl; break; } // last event reached
@@ -303,7 +293,6 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
             time = day*24*60 + hour*24 + minute;
         }
         
-	nRun = runNumber;
         //-------------------------------------------------
         // summary event info object
         HParticleEvtInfo* evtInfo=0;
@@ -317,20 +306,9 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
         noVETO = evtInfo->isGoodEvent(Particle::kNoVETO);
         goodSTARTVETO = evtInfo->isGoodEvent(Particle::kGoodSTARTVETO);
         goodSTARTMETA = evtInfo->isGoodEvent(Particle::kGoodSTARTMETA);
-        
-        isgoodEvent = (trigger && vertexClust && vertexCand && goodSTART && noPileUpSTART 
-                                            && noVETO && goodSTARTMETA && goodSTARTVETO);
 
-
-        /*if ( evtInfo&&!evtInfo->isGoodEvent(Particle::kGoodTRIGGER|
-                                        Particle::kGoodVertexClust|
-                                        Particle::kGoodVertexCand|
-                                        Particle::kGoodSTART|
-                                        Particle::kNoPileUpSTART|
-                                        Particle::kNoVETO|
-                                        Particle::kGoodSTARTVETO|
-                                        Particle::kGoodSTARTMETA) ) continue;
-        */
+        runId = gHades->getRuntimeDb()->getRun()->getRunId();
+        trigInd = gHades->getCurrentEvent()->getHeader()->getTBit();
         
         //get primary vertex
         HVertex vertexReco = gHades->getCurrentEvent()->getHeader()->getVertexReco();
@@ -340,12 +318,15 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
         vZ = vertexReco.getZ();
         vChi2 = vertexReco.getChi2();
 
-        //centrality
-        /*evtChara.execute();
-        centralityMdc = evtChara.getCentralityPercentile("SelcTrackCorr");
-        centralityTofRpc = evtChara.getCentralityPercentile("TOFRPCtimecut");
-        centralityWallCharge = evtChara.getCentralityPercentile("FWSumChargeSpec");     */
-        
+       //Track Primary and Hits 
+
+        nRpcClust = evtInfo->getSumRpcMult();
+        nRpcClustCut = evtInfo->getSumRpcMultCut();
+        nTofHits = evtInfo->getSumTofMult();
+        nTofHitsCut = evtInfo->getSumTofMultCut();
+        primaryTracks=evtInfo->getSumPrimaryParticleCandMult();C
+        selectedTracks=evtInfo->getSumSelectedParticleCandMult();
+
         // loop over FW hits
         HWallHit* wallHit = 0;
         
@@ -354,42 +335,22 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
             cerr << "ERROR: nWallHitsTot="<<nWallHitsTot<<" > maxNWallHits="<<maxNWallHits<<endl;
             return 1;
         }
-                       
-        for (Short_t isub=0; isub<nWallSubEvents; isub++) {
-            wallQw[isub]=0;
-            for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                wallQx[isub][iharm]=0;       
-                wallQy[isub][iharm]=0;
-            }
-        }
-        
-        for (Short_t irsub=0; irsub<nWallRandomSubEvents; irsub++) {
-            wallQwRandom[irsub]=0;
-            for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                wallQxRandom[irsub][iharm]=0;       
-                wallQyRandom[irsub][iharm]=0;
-            }
-        }
-
-        for (Short_t isub=0; isub<nMdcSubEvents; isub++) {
-            mdcQw[isub]=0;
-            for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                mdcQx[isub][iharm]=0;       
-                mdcQy[isub][iharm]=0;
-            }
-        } 
         
         Short_t subevent;
         Short_t ring;
         Float_t psi;
         Short_t randomSubEvent;
         Float_t hit_beta;
-        Float_t thetaFW;
         //for A.Sadovsky method:
         Int_t nA = 0;
         Int_t nB = 0;
-
         
+        wallChargeTot=0;
+        for (Short_t j=0; j<nRings; j++){
+            wallChargeTot_ring[j] = 0;
+        }
+
+
         for(Short_t j=0; j<nWallHitsTot; j++) {
             wallHit = HCategoryManager::getObject(wallHit,wallCat,j);
             
@@ -411,8 +372,6 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
             psi = wallHit->getPhi() * D2R;
             wallHitPhi[j] = psi;
             
-            thetaFW = wallHit->getTheta();
-            wallHitEta[j] = -TMath::Log(TMath::Tan(thetaFW/2));
             //cuts by B.Kardan
             hit_beta = wallHitDistance[j]/wallHitTime[j]/299.792458;
             if ( (ring<=4            && wallHitCharge[j]>80 && hit_beta>0.84 && hit_beta<1.) ||
@@ -420,101 +379,14 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
                  (ring>6             && wallHitCharge[j]>86 && hit_beta>0.80 && hit_beta<1.) ) {
                 
                 isWallHitOk[j] = kTRUE;
-                
-                //Q vectors
-                //Wall Subevents
-                if (subevent==-1) continue;
-                //WallRing1_9
-                for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                    wallQx[0][iharm]+= TMath::Cos((iharm+1)*psi);       
-                    wallQy[0][iharm]+= TMath::Sin((iharm+1)*psi);
-                }
-                wallQw[0]++;
+                    
+                wallChargeTot+=wallHitCharge[j];
 
-                //WallRing7_9
-                if (subevent==1) {
-                    for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                        wallQx[1][iharm]+= TMath::Cos((iharm+1)*psi);       
-                        wallQy[1][iharm]+= TMath::Sin((iharm+1)*psi);
-                    }
-                    wallQw[1]++;
-                }
-
-                //Other wall subevents
-                if (subevent>1) {
-                    for (short s = subevent; s>=2; s--) {
-                        for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                            wallQx[s][iharm]+= TMath::Cos((iharm+1)*psi);       
-                            wallQy[s][iharm]+= TMath::Sin((iharm+1)*psi);
-                        }
-                        wallQw[s]++;
-                    }
-                }
-                
-                rndm = randomGenerator->Rndm();
-                //Random Wall Subevents
-                randomSubEvent = (rndm<0.5) ? 0 : 1;
-                for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                    wallQxRandom[randomSubEvent][iharm]+= TMath::Cos((iharm+1)*psi);       
-                    wallQyRandom[randomSubEvent][iharm]+= TMath::Sin((iharm+1)*psi);
-                }
-                wallQwRandom[randomSubEvent]++;
-
-                //Random Wall Subevents by A.Sadovsky
-                Float_t level = (0.5*nWallHitsTot - nA)/((Float_t)(nWallHitsTot-nA-nB));
-                randomSubEvent = (rndm<level) ? 2 : 3;
-                for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                    wallQxRandom[randomSubEvent][iharm]+= TMath::Cos((iharm+1)*psi);       
-                    wallQyRandom[randomSubEvent][iharm]+= TMath::Sin((iharm+1)*psi);
-                }
-                wallQwRandom[randomSubEvent]++;
-                if (randomSubEvent==2) nA++;
-                else nB++;
-
-                //Chequerwise Wall Subevents
-                randomSubEvent = (wallModuleIndex[j]%2==0) ? 4 : 5;
-                for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                    wallQxRandom[randomSubEvent][iharm]+= TMath::Cos((iharm+1)*psi);
-                    wallQyRandom[randomSubEvent][iharm]+= TMath::Sin((iharm+1)*psi);
-                }
-                wallQwRandom[randomSubEvent]++;
-
-                //Ring7_9Random
-                if (ring>6) {
-                    randomSubEvent = (rndm<0.5) ? 6 : 7;
-                    for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                        wallQxRandom[randomSubEvent][iharm]+= TMath::Cos((iharm+1)*psi);       
-                        wallQyRandom[randomSubEvent][iharm]+= TMath::Sin((iharm+1)*psi);
-                    }
-                    wallQwRandom[randomSubEvent]++;
-                }
-                //Ring1_6Random
-                if (ring>=1&&ring<=6) {
-                    randomSubEvent = (rndm<0.5) ? 8 : 9;
-                    for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                        wallQxRandom[randomSubEvent][iharm]+= TMath::Cos((iharm+1)*psi);       
-                        wallQyRandom[randomSubEvent][iharm]+= TMath::Sin((iharm+1)*psi);
-                    }
-                    wallQwRandom[randomSubEvent]++;
+                for (Short_t i; i < nRings; i++){
+                    if (ring == i) wallChargeTot_ring[i]+=wallHitCharge[j];
                 }
             }//B.Kardan cuts for wall hits
         }//loop over wall hits
-        
-        for (Short_t isub=0; isub<nWallSubEvents; isub++) {
-            if (wallQw[isub]==0) continue;
-            for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                wallQx[isub][iharm] = wallQx[isub][iharm] / wallQw[isub];       
-                wallQy[isub][iharm] = wallQy[isub][iharm] / wallQw[isub]; 
-            }
-        }
-        
-        for (Short_t irsub=0; irsub<nWallRandomSubEvents; irsub++) {
-            if (wallQwRandom[irsub]==0) continue;
-            for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                wallQxRandom[irsub][iharm] = wallQxRandom[irsub][iharm] / wallQwRandom[irsub];       
-                wallQyRandom[irsub][iharm] = wallQyRandom[irsub][iharm] / wallQwRandom[irsub]; 
-            }
-        }
         
         
         // loop over particle candidates in event
@@ -579,33 +451,11 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1, Int_t runN
             }
 
             //track cuts for MDC Q-vectors
-            if ( pid[itr]==14 && pt_corr[itr]>250 && pt_corr[itr]<1700 &&
+            /*if ( pid[itr]==14 && pt_corr[itr]>250 && pt_corr[itr]<1700 &&
                  TMath::Abs(zToBeam[itr]-vZ)<15. && TMath::Abs(rToBeam[itr])<15. &&
-                 beta[itr]<1 && mass[itr]>600 && mass[itr]<1200) {
-
-                Short_t mdcSubEvent=-1;
-                if (rapidity_corr[itr]>-0.7&&rapidity_corr[itr]<-0.2) mdcSubEvent=0;
-                if (rapidity_corr[itr]>-0.7&&rapidity_corr[itr]<-0.4) mdcSubEvent=1;
-                if (rapidity_corr[itr]>0.2&&rapidity_corr[itr]<0.7) mdcSubEvent=2;
-                if (mdcSubEvent>-1) {
-                    for (Short_t iharm = 0; iharm<nHarmonics; iharm++) {
-                        mdcQx[mdcSubEvent][iharm] += TMath::Cos((iharm+1)*phi[itr]);
-                        mdcQy[mdcSubEvent][iharm] += TMath::Sin((iharm+1)*phi[itr]);
-                    }
-                    mdcQw[mdcSubEvent]++;
-                }
-            }       
+                 beta[itr]<1 && mass[itr]>600 && mass[itr]<1200) */
 
         } // end cand loop
-
-        for (Short_t isub=0; isub<nMdcSubEvents; isub++) {
-            if (mdcQw[isub]==0) continue;
-            Float_t sign = (isub==2) ? 1 : -1;
-            for (Short_t iharm=0; iharm<nHarmonics; iharm++) {
-                mdcQx[isub][iharm] = sign * mdcQx[isub][iharm] / mdcQw[isub];       
-                mdcQy[isub][iharm] = sign * mdcQy[isub][iharm] / mdcQw[isub]; 
-            }
-        }
         
         tree->Fill(); 
         
