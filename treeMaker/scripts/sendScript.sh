@@ -7,9 +7,9 @@ currentDir=$(pwd)
 jobscript=${currentDir}/jobScript.sh
 currentTime=$(date +"%b_%d_%k_%M" | tr -d ' ')
 configuration=${1}
-filelist=lists/${configuration}
-outputdir=${currentDir}/output/${currentTime}/${configuration}
-logdir=${currentDir}/log/${currentTime}/${configuration}
+filelist=../lists/${configuration}
+outputdir=${currentDir}/../output/${currentTime}/${configuration}
+logdir=${currentDir}/../log/${currentTime}/${configuration}
 
 
 if [ "$#" -ne "2" ]
@@ -44,12 +44,12 @@ else
    echo "===> USE LOGDIR : $logdir"
 fi
 
-cp -r ${currentDir}/src ${currentDir}/output/${currentTime}/${configuration}/src
-cp ${currentDir}/src/exeMakeTree ${currentDir}/output/${currentTime}/${configuration}
+cp -r ${currentDir}/../src ${currentDir}/../output/${currentTime}/${configuration}/src
+cp ${currentDir}/../src/exeMakeTree ${currentDir}/../output/${currentTime}/${configuration}
 
 
 env=/cvmfs/hades.gsi.de/install/5.34.34/hydra2-4.9n/defall.sh   # environment script
-exe=${currentDir}/output/${currentTime}/${configuration}/exeMakeTree             # executable
+exe=${currentDir}/../output/${currentTime}/${configuration}/exeMakeTree             # executable
 numberOfRuns=0   # counter for part number
 
 prevrunnumber=$(cat $filelist | sort | sed -r 's/.*\/be//' | sed -r 's/.hld.+//' | rev | cut -c 3- | rev | head -1)
