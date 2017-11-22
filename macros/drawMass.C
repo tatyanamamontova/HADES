@@ -40,8 +40,8 @@ void drawMass(char* input){
 
     canv = new TCanvas();
     leg = new TLegend(0.7,0.7,0.9,0.9);
-    hPtVsPcorr->Draw("colz");
-    hPtVsPcorr->SetStats(false);
+    hMTheta->Draw("colz");
+    hMTheta->SetStats(false);
     sprintf(picName, "%s/pics/MassVsTheta.png", outputdir);
     canv->SaveAs(picName);
     sprintf(picName, "%s/pics/MassVsTheta.C", outputdir);
