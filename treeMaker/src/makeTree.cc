@@ -109,7 +109,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Int_t primaryTracks;                     //number of primary tracks
     Int_t selectedTracks;                    //number of selected tracks
     Short_t trigInd;                         //type of trigger
-    Short_t runId;                           //run number
+    //Short_t runId;                           //run number
    
     //FW hits
     const Short_t maxNWallHits = 200;        //maximal number of FW hits
@@ -169,6 +169,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Float_t pt_corr[maxNTracks];
     Float_t rapidity_corr[maxNTracks];
     
+    TString::Format("X_amp[%i]/F", XYSTRIPS)
     
     TFile* out = new TFile(outfile.Data(),"RECREATE");
     out->cd();
@@ -183,20 +184,20 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("primaryTracks",      &primaryTracks,     "primaryTracks/I");
     tree->Branch("selectedTracks",     &selectedTracks,    "selectedTracks/I");
     tree->Branch("trigInd",            &trigInd,           "trigInd/S");
-    tree->Branch("runId",              &runId,             "runId/S");
+    //tree->Branch("runId",              &runId,             "runId/S");
 
-    tree->Branch("cuts",             cuts,            "cuts[nCuts]/O");
+    tree->Branch("cuts",             cuts,            TString::Format("cuts[%i]/O", nCuts));
    
     //FW Hits
-    tree->Branch("wallModuleIndex",     wallModuleIndex,        "wallModuleIndex[nWallHitsTot]/S");
-    tree->Branch("wallHitTime",         wallHitTime,            "wallHitTime[nWallHitsTot]/F");  
-    tree->Branch("wallHitCharge",       wallHitCharge,          "wallHitCharge[nWallHitsTot]/F");
-    tree->Branch("wallHitDistance",     wallHitDistance,        "wallHitDistance[nWallHitsTot]/F");
-    tree->Branch("wallHitRing",         wallHitRing,            "wallHitRing[nWallHitsTot]/S");
-    tree->Branch("wallHitPhi",          wallHitPhi,             "wallHitPhi[nWallHitsTot]/F");
-    tree->Branch("isWallHitOk",         isWallHitOk,            "isWallHitOk[nWallHitsTot]/O");
+    tree->Branch("wallModuleIndex",     wallModuleIndex,        TString::Format("wallModuleIndex[%i]/S", nWallHitsTot));
+    tree->Branch("wallHitTime",         wallHitTime,            TString::Format("wallHitTime[%i]/S", nWallHitsTot));  
+    tree->Branch("wallHitCharge",       wallHitCharge,          TString::Format("wallHitCharge[[%i]/S", nWallHitsTot));
+    tree->Branch("wallHitDistance",     wallHitDistance,        TString::Format("wallHitDistance[%i]/S", nWallHitsTot));
+    tree->Branch("wallHitRing",         wallHitRing,            TString::Format("wallHitRing[%i]/S", nWallHitsTot));
+    tree->Branch("wallHitPhi",          wallHitPhi,             TString::Format("wallHitPhi[%i]/S", nWallHitsTot));
+    tree->Branch("isWallHitOk",         isWallHitOk,            TString::Format("isWallHitOk[%i]/S", nWallHitsTot));
     tree->Branch("wallChargeTot",       &wallChargeTot,         "wallChargeTot/F");
-    tree->Branch("wallChargeTot_ring",  wallChargeTot_ring,     "wallChargeTot_ring[nRings]/F");
+    tree->Branch("wallChargeTot_ring",  wallChargeTot_ring,     TString::Format("wallChargeTot_ring[%i]/S", nRings));
   
     //MDC 
     tree->Branch("nTracks",  &nTracks,  "nTracks/S"); 
@@ -321,8 +322,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         Short_t randomSubEvent;
         Float_t hit_beta;
         //for A.Sadovsky method:
-        Int_t nA = 0;
-        Int_t nB = 0;
+        //Int_t nA = 0;
+        //Int_t nB = 0;
         
         wallChargeTot=0;
         for (Short_t j=0; j<nRings; j++){
