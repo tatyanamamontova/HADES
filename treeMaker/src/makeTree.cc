@@ -99,7 +99,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
 
     const Short_t nRings = 9;                // number of rings in FW
     Short_t nWallHitsTot;                    //total number of FW hits
-
+    const Short_t nCuts = 8;                 //number of cuts for event
 
     //Hits
     Int_t nRpcClust;                         //number of RPC hits   
@@ -110,7 +110,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Int_t selectedTracks;                    //number of selected tracks
     Short_t trigInd;                         //type of trigger
     Short_t runId;                           //run number
-    
+   
     //FW hits
     const Short_t maxNWallHits = 200;        //maximal number of FW hits
     Short_t wallModuleIndex[maxNWallHits];   //index of hit module
@@ -141,14 +141,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Int_t time;
 
     //Cuts
-    Bool_t trigger;
-    Bool_t vertexClust;
-    Bool_t vertexCand;
-    Bool_t goodSTART;
-    Bool_t noPileUpSTART;
-    Bool_t noVETO;
-    Bool_t goodSTARTVETO;
-    Bool_t goodSTARTMETA;
+    Bool_t cuts[nCuts]; //trigger; vertexClust; vertexCand; goodSTART;
+                        //noPileUpSTART; noVETO; goodSTARTVETO; goodSTARTMETA
 
     //tracks
     const Short_t maxNTracks = 200;
@@ -191,18 +185,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("trigInd",            &trigInd,           "trigInd/S");
     tree->Branch("runId",              &runId,             "runId/S");
 
-
-
-    tree->Branch("trigger",             &trigger,            "trigger/O");
-    tree->Branch("vertexClust",         &vertexClust,        "vertexClust/O");
-    tree->Branch("vertexCand",          &vertexCand,         "vertexCand/O");
-    tree->Branch("goodSTART",           &goodSTART,          "goodSTART/O");
-    tree->Branch("noPileUpSTART",       &noPileUpSTART,      "noPileUpSTART/O");
-    tree->Branch("noVETO",              &noVETO,             "noVETO/O");
-    tree->Branch("goodSTARTVETO",       &goodSTARTVETO,      "goodSTARTVETO/O");
-    tree->Branch("goodSTARTMETA",       &goodSTARTMETA,      "goodSTARTMETA/O");
-
-    
+    tree->Branch("cuts",             cuts,            "cuts[nCuts]/O");
+   
     //FW Hits
     tree->Branch("wallModuleIndex",     wallModuleIndex,        "wallModuleIndex[nWallHitsTot]/S");
     tree->Branch("wallHitTime",         wallHitTime,            "wallHitTime[nWallHitsTot]/F");  
@@ -213,8 +197,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("isWallHitOk",         isWallHitOk,            "isWallHitOk[nWallHitsTot]/O");
     tree->Branch("wallChargeTot",       &wallChargeTot,         "wallChargeTot/F");
     tree->Branch("wallChargeTot_ring",  wallChargeTot_ring,     "wallChargeTot_ring[nRings]/F");
-
-     
+  
     //MDC 
     tree->Branch("nTracks",  &nTracks,  "nTracks/S"); 
     tree->Branch("nProtons", &nProtons, "nProtons/S");
@@ -254,9 +237,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("pt_corr",  pt_corr,  "pt_corr[nTracks]/F");
     tree->Branch("rapidity_corr",rapidity_corr,"rapidity_corr[nTracks]/F");
     
-    
-    
-    
+
     //#######################################################################
     //#######################################################################
 
@@ -296,14 +277,14 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         HParticleEvtInfo* evtInfo=0;
         evtInfo = HCategoryManager::getObject(evtInfo,evtInfoCat,0 );
 
-        trigger = evtInfo->isGoodEvent(Particle::kGoodTRIGGER);
-        vertexClust = evtInfo->isGoodEvent(Particle::kGoodVertexClust);
-        vertexCand = evtInfo->isGoodEvent(Particle::kGoodVertexCand);
-        goodSTART = evtInfo->isGoodEvent(Particle::kGoodSTART);
-        noPileUpSTART = evtInfo->isGoodEvent(Particle::kNoPileUpSTART);
-        noVETO = evtInfo->isGoodEvent(Particle::kNoVETO);
-        goodSTARTVETO = evtInfo->isGoodEvent(Particle::kGoodSTARTVETO);
-        goodSTARTMETA = evtInfo->isGoodEvent(Particle::kGoodSTARTMETA);
+        cuts[0] = evtInfo->isGoodEvent(Particle::kGoodTRIGGER);
+        cuts[1] = evtInfo->isGoodEvent(Particle::kGoodVertexClust);
+        cuts[2] = evtInfo->isGoodEvent(Particle::kGoodVertexCand);
+        cuts[3] = evtInfo->isGoodEvent(Particle::kGoodSTART);
+        cuts[4] = evtInfo->isGoodEvent(Particle::kNoPileUpSTART);
+        cuts[5] = evtInfo->isGoodEvent(Particle::kNoVETO);
+        cuts[6] = evtInfo->isGoodEvent(Particle::kGoodSTARTVETO);
+        cuts[7] = evtInfo->isGoodEvent(Particle::kGoodSTARTMETA);
 
         //runId = gHades->getRuntimeDb()->getRun()->getRunId();
         trigInd = gHades->getCurrentEvent()->getHeader()->getTBit();
