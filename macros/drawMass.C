@@ -17,7 +17,7 @@ void drawMass(char* input){
     sprintf(trees, "%s.root/tree", input);
     ch->Add(trees);
 
-    TH2F *hMTheta = new TH2F("hMTheta", "Mass vs Theta; m [Mev/c^2]; #theta[rad]; nTracks", 100, 0, 4000, 100, 0, 1.6);
+    TH2F *hMTheta = new TH2F("hMTheta", "Mass vs Theta; m [Mev/c^2]; #theta[rad]; nTracks", 1000, 0, 4000, 100, 0, 1.6);
 
     Short_t nTracks;
     const Short_t maxNTracks = 200;
