@@ -42,9 +42,9 @@ void drawMass(char* input){
     leg = new TLegend(0.7,0.7,0.9,0.9);
     hMTheta->Draw("colz");
     hMTheta->SetStats(false);
-    sprintf(picName, "%s/pics/MassVsTheta.png", outputdir);
+    sprintf(picName, "./pics/MassVsTheta.png");
     canv->SaveAs(picName);
-    sprintf(picName, "%s/pics/MassVsTheta.C", outputdir);
+    sprintf(picName, "./pics/MassVsTheta.C");
     canv->SaveAs(picName);
     delete canv;
     delete leg;
