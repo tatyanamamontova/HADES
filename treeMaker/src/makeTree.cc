@@ -189,7 +189,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     //FW Hits
     tree->Branch("wallModuleIndex",     wallModuleIndex,        TString::Format("wallModuleIndex[%i]/S", nWallHitsTot));
     tree->Branch("wallHitTime",         wallHitTime,            TString::Format("wallHitTime[%i]/S", nWallHitsTot));  
-    tree->Branch("wallHitCharge",       wallHitCharge,          TString::Format("wallHitCharge[[%i]/S", nWallHitsTot));
+    tree->Branch("wallHitCharge",       wallHitCharge,          TString::Format("wallHitCharge[%i]/S", nWallHitsTot));
     tree->Branch("wallHitDistance",     wallHitDistance,        TString::Format("wallHitDistance[%i]/S", nWallHitsTot));
     tree->Branch("wallHitRing",         wallHitRing,            TString::Format("wallHitRing[%i]/S", nWallHitsTot));
     tree->Branch("wallHitPhi",          wallHitPhi,             TString::Format("wallHitPhi[%i]/S", nWallHitsTot));
