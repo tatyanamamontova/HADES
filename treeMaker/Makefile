@@ -1,6 +1,6 @@
 APP_NAME      := ../exeMakeTree
 
-SOURCE_FILES  := makeTree.cc
+SOURCE_FILES  := src/makeTree.cc
 USES_RFIO     := no
 USES_ORACLE   := yes
 USES_GFORTRAN := yes

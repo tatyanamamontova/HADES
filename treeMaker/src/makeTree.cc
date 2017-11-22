@@ -17,6 +17,8 @@
 #include "hphysicsconstants.h"
 #include "hwallhit.h"
 #include "walldef.h"
+#include <hruntimedb.h>
+#include <hrun.h>
 
 #include "TString.h"
 #include "TROOT.h"
@@ -303,7 +305,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         goodSTARTVETO = evtInfo->isGoodEvent(Particle::kGoodSTARTVETO);
         goodSTARTMETA = evtInfo->isGoodEvent(Particle::kGoodSTARTMETA);
 
-        runId = gHades->getRuntimeDb->getRun()->getRunId();
+        //runId = gHades->getRuntimeDb()->getRun()->getRunId();
         trigInd = gHades->getCurrentEvent()->getHeader()->getTBit();
         
         //get primary vertex

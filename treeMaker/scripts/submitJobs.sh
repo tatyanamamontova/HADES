@@ -45,7 +45,7 @@ else
 fi
 
 cp -r ${currentDir}/../src ${currentDir}/../output/${currentTime}/${configuration}/src
-cp ${currentDir}/../src/exeMakeTree ${currentDir}/../output/${currentTime}/${configuration}
+cp ${currentDir}/../exeMakeTree ${currentDir}/../output/${currentTime}/${configuration}
 
 
 env=/cvmfs/hades.gsi.de/install/5.34.34/hydra2-4.9n/defall.sh   # environment script
