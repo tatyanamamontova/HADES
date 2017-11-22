@@ -167,6 +167,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Float_t metaMatchRadius[maxNTracks];
     Float_t p_corr[maxNTracks];
     Float_t pt_corr[maxNTracks];
+    Float_t rapidity_corr[maxNTracks];
     
     TFile* out = new TFile(outfile.Data(),"RECREATE");
     out->cd();
