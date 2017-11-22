@@ -96,10 +96,6 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
 
 
     const Short_t nRings = 9;                // number of rings in FW
-    const Short_t nWallSubEvents = 6;        //number of FW subevents
-    const Short_t nWallRandomSubEvents = 10; //number of random FW subevents
-    const Short_t nMdcSubEvents = 3;         //number of MDC subevents 
-    const Short_t nHarmonics = 2;            //number of harmonics for q-vectors
     Short_t nWallHitsTot;                    //total number of FW hits
 
 
@@ -307,7 +303,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         goodSTARTVETO = evtInfo->isGoodEvent(Particle::kGoodSTARTVETO);
         goodSTARTMETA = evtInfo->isGoodEvent(Particle::kGoodSTARTMETA);
 
-        runId = gHades->getRuntimeDb()->getRun()->getRunId();
+        runId = gHades->getRuntimeDb->getRun()->getRunId();
         trigInd = gHades->getCurrentEvent()->getHeader()->getTBit();
         
         //get primary vertex
@@ -324,7 +320,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         nRpcClustCut = evtInfo->getSumRpcMultCut();
         nTofHits = evtInfo->getSumTofMult();
         nTofHitsCut = evtInfo->getSumTofMultCut();
-        primaryTracks=evtInfo->getSumPrimaryParticleCandMult();C
+        primaryTracks=evtInfo->getSumPrimaryParticleCandMult();
         selectedTracks=evtInfo->getSumSelectedParticleCandMult();
 
         // loop over FW hits
