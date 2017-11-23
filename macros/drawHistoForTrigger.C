@@ -48,7 +48,7 @@ while(entry < ch->GetEntries()) {
     entry++;
 }
 
-string cutName[nTriggers] = {"PT1","PT2","PT3","PT4", "No one"};
+string cutName[nTriggers+1] = {"PT1","PT2","PT3","PT4", "No one"};
 
 canv = new TCanvas();
 leg = new TLegend(0.7,0.7,0.9,0.9);
