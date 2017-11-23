@@ -28,6 +28,7 @@ ch->SetBranchAddress("cuts", cuts);
 
 TH1F* hCuts = new TH1F("hCuts", "Event cuts; ; Events", nCuts, 0, nCuts);
 TH1F* hisgoodEvent = new TH1F("hisgoodEvent", "All cuts; ; Events", 2, -0.5, 1.5);
+TH1F* hCutRejected = new TH1F("hCutRejected", "Rejected Events; ; Events", nCuts, 0, nCuts);
 
 // ch->SetBranchAddress("trigger",             &trigger);
 // ch->SetBranchAddress("vertexClust",         &vertexClust);
@@ -41,9 +42,11 @@ TH1F* hisgoodEvent = new TH1F("hisgoodEvent", "All cuts; ; Events", 2, -0.5, 1.5
 
 
 int entry=0;
+Bool_t check;
 while(entry < ch->GetEntries()) {
     ch->GetEntry(entry);
 
+    check = kTRUE;
     for (Int_t i = 0; i < nCuts; i++){
         if(cuts[i]) {
             hCuts->Fill(i+0.5);
@@ -52,7 +55,14 @@ while(entry < ch->GetEntries()) {
             hisgoodEvent->Fill(1);
         }
 
+        for (Int_t j = 0; j < nCuts; j++){
+            if (i != j) check = check && cuts[j];
+        }
+        
+        if (check) hCutRejected ->Fill(i+0.5);
+
     }
+
     hisgoodEvent->Fill(0);
     entry++;
 }
@@ -69,9 +79,9 @@ hCuts->SetFillColor(38);
 hCuts->SetBarWidth(0.9);
 hCuts->SetStats(0);
 hCuts->Draw("b");
-sprintf(picName, "./pics/Cuts_%s.png", input);
+sprintf(picName, "./pics/Cuts.png");
 canv->SaveAs(picName);
-sprintf(picName, "./pics/Cuts_%s.C", input);
+sprintf(picName, "./pics/Cuts.C");
 canv->SaveAs(picName);
 delete canv;
 delete leg;
@@ -88,12 +98,29 @@ hisgoodEvent->SetBarWidth(0.9);
 hisgoodEvent->SetStats(0);
 hisgoodEvent->Draw("b");
 hisgoodEvent->Draw("b");
-sprintf(picName, "./pics/Evt_%s.png", input);
+sprintf(picName, "./pics/Evt.png");
 canv->SaveAs(picName);
-sprintf(picName, "./pics/Evt_%s.C", input);
+sprintf(picName, "./pics/Evt.C");
 canv->SaveAs(picName);
 delete canv;
 delete leg;
+
+canv = new TCanvas();
+leg = new TLegend(0.7,0.7,0.9,0.9);
+for (Int_t i=0; i < nCuts; i++) { 
+    hCutRejected->GetXaxis()->SetBinLabel(i+1,cutName[i].c_str());
+}
+hCutRejected->SetFillColor(38);
+hCutRejected->SetBarWidth(0.9);
+hCutRejected->SetStats(0);
+hCutRejected->Draw("b");
+sprintf(picName, "./pics/Cuts_rej.png");
+canv->SaveAs(picName);
+sprintf(picName, "./pics/Cuts_rej.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
+
 
 
 }
