@@ -49,7 +49,6 @@ while(entry < ch->GetEntries()) {
 canv = new TCanvas();
 hTOFPT2->SetLineColor(2);
 hTOFPT3->SetLineColor(3);
-<<<<<<< HEAD
 hTOFPT3->SetStats(0);
 hTOFPT2->SetStats(0);
 hTOFPT2->Draw();
@@ -66,13 +65,11 @@ leg->AddEntry(hTOFPT2, "PT2", "l");
 leg->AddEntry(hTOFPT3, "PT3", "l");
 leg->Draw();
 
-=======
 leg->AddEntry(hTOFPT2, "PT2", "l");
 leg->AddEntry(hTOFPT3, "PT3", "l");
 leg->Draw();
 hTOFPT2->Draw();
 hTOFPT3->Draw("same");
->>>>>>> c0de756f43fe396ebd26314276a263a106940fc4
 sprintf(picName, "./pics/TOF.png");
 canv->SaveAs(picName);
 sprintf(picName, "./pics/TOF.C");
