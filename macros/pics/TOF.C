@@ -1,6 +1,6 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Thu Nov 23 18:19:13 2017) by ROOT version5.34/34
+//=========  (Thu Nov 23 18:39:37 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
    c1->Range(-15,-2467.763,135,22209.86);
    c1->SetFillColor(0);
@@ -101,23 +101,7 @@
    hTof__1->SetBinContent(93,2);
    hTof__1->SetEntries(174579);
    hTof__1->SetDirectory(0);
-   
-   TPaveStats *ptstats = new TPaveStats(0.78,0.775,0.98,0.935,"brNDC");
-   ptstats->SetName("stats");
-   ptstats->SetBorderSize(1);
-   ptstats->SetFillColor(0);
-   ptstats->SetTextAlign(12);
-   ptstats->SetTextFont(42);
-   TText *text = ptstats->AddText("hTof");
-   text->SetTextSize(0.0368);
-   text = ptstats->AddText("Entries = 174579 ");
-   text = ptstats->AddText("Mean  =  16.46");
-   text = ptstats->AddText("RMS   =  16.39");
-   ptstats->SetOptStat(1111);
-   ptstats->SetOptFit(0);
-   ptstats->Draw();
-   hTof__1->GetListOfFunctions()->Add(ptstats);
-   ptstats->SetParent(hTof__1);
+   hTof__1->SetStats(0);
    hTof__1->SetLineColor(2);
    hTof__1->GetXaxis()->SetTitle(" nEvents");
    hTof__1->GetXaxis()->SetLabelFont(42);
@@ -236,6 +220,7 @@
    hTof->SetBinContent(106,2);
    hTof->SetBinContent(113,1);
    hTof->SetEntries(519426);
+   hTof->SetStats(0);
    hTof->SetLineColor(3);
    hTof->GetXaxis()->SetTitle(" nEvents");
    hTof->GetXaxis()->SetLabelFont(42);
@@ -259,7 +244,7 @@
    pt->SetFillColor(0);
    pt->SetFillStyle(0);
    pt->SetTextFont(42);
-   text = pt->AddText("Tof Hits with PT");
+   TText *text = pt->AddText("Tof Hits with PT");
    pt->Draw();
    c1->Modified();
    c1->cd();
