@@ -100,6 +100,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     const Short_t nRings = 9;                // number of rings in FW
     Short_t nWallHitsTot;                    //total number of FW hits
     const Short_t nCuts = 8;                 //number of cuts for event
+    const Int_t nModules = 304;              //number of modules in FW
+    const Int_t nTriggers = 4;               //triggers PT1-4
 
     //Hits
     Int_t nRpcClust;                         //number of RPC hits   
@@ -108,8 +110,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Int_t nTofHitsCut;                       //number of TOF hits with time cut
     Int_t primaryTracks;                     //number of primary tracks
     Int_t selectedTracks;                    //number of selected tracks
-    Short_t trigInd;                         //type of trigger
-    //Short_t runId;                           //run number
+    Bool_t trigInd[nTriggers];               //type of trigger
+    Short_t runId;                           //run number
    
     //FW hits
     const Short_t maxNWallHits = 200;        //maximal number of FW hits
@@ -181,8 +183,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("nTofHitsCut",        &nTofHitsCut,       "nTofHitsCut/I");
     tree->Branch("primaryTracks",      &primaryTracks,     "primaryTracks/I");
     tree->Branch("selectedTracks",     &selectedTracks,    "selectedTracks/I");
-    tree->Branch("trigInd",            &trigInd,           "trigInd/S");
-    //tree->Branch("runId",              &runId,             "runId/S");
+    tree->Branch("trigInd",            &trigInd,           TString::Format("trigInd[%i]/isWallHitOk", nTriggers));
+    tree->Branch("runId",              &runId,             "runId/S");
 
     tree->Branch("cuts",             cuts,            TString::Format("cuts[%i]/O", nCuts));
    
@@ -194,6 +196,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("wallHitRing",         wallHitRing,            TString::Format("wallHitRing[%i]/S", nWallHitsTot));
     tree->Branch("wallHitPhi",          wallHitPhi,             TString::Format("wallHitPhi[%i]/S", nWallHitsTot));
     tree->Branch("isWallHitOk",         isWallHitOk,            TString::Format("isWallHitOk[%i]/S", nWallHitsTot));
+    tree->Branch("wallChargeTot_mod",   wallChargeTot_mod,      String::Format("wallChargeTot_mod[%i]/S", nModules))
     tree->Branch("wallChargeTot",       &wallChargeTot,         "wallChargeTot/F");
     tree->Branch("wallChargeTot_ring",  wallChargeTot_ring,     TString::Format("wallChargeTot_ring[%i]/S", nRings));
   
@@ -234,7 +237,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("metaMatchRadius",  metaMatchRadius,  "metaMatchRadius[nTracks]/F");
     tree->Branch("p_corr",   p_corr,   "p_corr[nTracks]/F");
     tree->Branch("pt_corr",  pt_corr,  "pt_corr[nTracks]/F");
-    tree->Branch("rapidity_corr",rapidity_corr,"rapidity_corr[nTracks]/F");
+    tree->Branch("rapidity_corr", rapidity_corr,"rapidity_corr[nTracks]/F");
     
 
     //#######################################################################
@@ -276,6 +279,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         HParticleEvtInfo* evtInfo=0;
         evtInfo = HCategoryManager::getObject(evtInfo,evtInfoCat,0 );
 
+        //cut info
         cuts[0] = evtInfo->isGoodEvent(Particle::kGoodTRIGGER);
         cuts[1] = evtInfo->isGoodEvent(Particle::kGoodVertexClust);
         cuts[2] = evtInfo->isGoodEvent(Particle::kGoodVertexCand);
@@ -285,7 +289,13 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         cuts[6] = evtInfo->isGoodEvent(Particle::kGoodSTARTVETO);
         cuts[7] = evtInfo->isGoodEvent(Particle::kGoodSTARTMETA);
 
-        //runId = gHades->getRuntimeDb()->getRun()->getRunId();
+        //get Run number
+        runId = gHades->getRuntimeDb()->getCurrentRun()->getRunId();
+        
+        //get type of trigger
+        for (Int_t k = 0; k < nTriggers; k++){
+            trigInd[k] = gHades->getCurrentEvent()->getHeader()->getTBit()->IsTBit(k+11);
+        }
         trigInd = gHades->getCurrentEvent()->getHeader()->getTBit();
         
         //get primary vertex
@@ -360,8 +370,14 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
                     
                 wallChargeTot+=wallHitCharge[j];
 
-                for (Short_t i; i < nRings; i++){
-                    if (ring == i) wallChargeTot_ring[i]+=wallHitCharge[j];
+                //Charge for rings
+                for (Short_t k; k < nRings; k++){
+                    if (ring == k) wallChargeTot_ring[k]+=wallHitCharge[j];
+                }
+
+                //Charge for modules
+                for (Int_t k = 1; k <= nModules; k++){
+                    if(wallModuleIndex[j] == k) wallChargeTot_mod[k-1]+=wallHitCharge[j];
                 }
             }//B.Kardan cuts for wall hits
         }//loop over wall hits
