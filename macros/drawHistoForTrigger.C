@@ -28,7 +28,7 @@ Bool_t trigInd[nTriggers];
 
 ch->SetBranchAddress("trigInd", trigInd);
 
-TH1F* hTrig = new TH1F("hCuts", "Event cuts; ; Events", nTriggers, 0, nTriggers);
+TH1F* hTrig = new TH1F("hCuts", "Event cuts; ; Events", nTriggers+1, 0, nTriggers+1);
 
 
 int entry=0;
@@ -37,12 +37,13 @@ while(entry < ch->GetEntries()) {
 
     for (Int_t i = 0; i < nTriggers; i++){
         if(trigInd[i]) hTrig->Fill(i+0.5);
-}
+        else hTrig->Fill(nTriggers+0.5);
+	}
     
     entry++;
 }
 
-string cutName[nTriggers] = {"PT1","PT2","PT3","PT4"};
+string cutName[nTriggers] = {"PT1","PT2","PT3","PT4", "No one"};
 
 canv = new TCanvas();
 leg = new TLegend(0.7,0.7,0.9,0.9);
