@@ -47,7 +47,7 @@ string cutName[nTriggers] = {"PT1","PT2","PT3","PT4", "No one"};
 
 canv = new TCanvas();
 leg = new TLegend(0.7,0.7,0.9,0.9);
-for (Int_t i=0; i < nTriggers; i++) { 
+for (Int_t i=0; i < nTriggers+1; i++) { 
     hTrig->GetXaxis()->SetBinLabel(i+1,cutName[i].c_str());
 }
 hTrig->SetFillColor(38);
