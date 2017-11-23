@@ -28,7 +28,7 @@ Bool_t trigInd[nTriggers];
 Int_t nTofHitsCut;
 
 ch->SetBranchAddress("trigInd", trigInd);
-ch->SetBranchAddress("nTofHitsCut", &nTofHitsCut)
+ch->SetBranchAddress("nTofHitsCut", &nTofHitsCut);
 
 TH1F* hTOFPT2 = new TH1F("hTof", "Tof Hits with PT2; nEvents; nHits", 120, 0, 120);
 TH1F* hTOFPT3 = new TH1F("hTof", "Tof Hits with PT3; nEvents; nHits", 120, 0, 120);
