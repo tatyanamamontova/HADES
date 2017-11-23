@@ -1,8 +1,8 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Thu Nov 23 19:24:59 2017) by ROOT version5.34/34
+//=========  (Thu Nov 23 19:34:27 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
-   c1->Range(-1,290884.8,9,318674.7);
+   c1->Range(-1,-2646.656,9,23819.91);
    c1->SetFillColor(0);
    c1->SetBorderMode(0);
    c1->SetBorderSize(2);
@@ -10,16 +10,9 @@
    c1->SetFrameBorderMode(0);
    
    TH1F *hCutRejected = new TH1F("hCutRejected","Rejected Events",8,0,8);
-   hCutRejected->SetBinContent(1,314837);
-   hCutRejected->SetBinContent(2,294672);
-   hCutRejected->SetBinContent(3,294672);
-   hCutRejected->SetBinContent(4,294672);
-   hCutRejected->SetBinContent(5,294672);
-   hCutRejected->SetBinContent(6,294672);
-   hCutRejected->SetBinContent(7,294672);
-   hCutRejected->SetBinContent(8,294672);
+   hCutRejected->SetBinContent(1,20165);
    hCutRejected->SetBarWidth(0.9);
-   hCutRejected->SetEntries(2377541);
+   hCutRejected->SetEntries(20165);
    hCutRejected->SetStats(0);
    hCutRejected->SetFillColor(38);
 
