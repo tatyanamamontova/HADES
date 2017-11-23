@@ -47,8 +47,10 @@ while(entry < ch->GetEntries()) {
     ch->GetEntry(entry);
     count = 0;
     for (Int_t i = 0; i < nCuts; i++){
-        if(cuts[i]) hCuts->Fill(i+0.5);
-        else count++;
+        if(cuts[i]) {
+            hCuts->Fill(i+0.5);
+            count++;
+        }
 
     }
     if (count == nCuts) hisgoodEvent->Fill(1);
