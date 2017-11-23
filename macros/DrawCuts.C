@@ -57,8 +57,9 @@ while(entry < ch->GetEntries()) {
 
         for (Int_t j = 0; j < nCuts; j++){
             if (i != j) check = check && cuts[j];
+            else check = check && !cuts[i];
         }
-        
+
         if (check) hCutRejected ->Fill(i+0.5);
 
     }
