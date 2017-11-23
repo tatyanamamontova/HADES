@@ -1,8 +1,8 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Thu Nov 23 11:43:38 2017) by ROOT version5.34/34
+//=========  (Thu Nov 23 11:46:55 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
-   c1->Range(-0.75,-82662.17,1.75,743959.5);
+   c1->Range(-0.75,231683.1,1.75,693594.8);
    c1->SetFillColor(0);
    c1->SetBorderMode(0);
    c1->SetBorderSize(2);
@@ -11,9 +11,9 @@
    
    TH1F *hisgoodEvent = new TH1F("hisgoodEvent","All cuts",2,-0.5,1.5);
    hisgoodEvent->SetBinContent(1,629807);
-   hisgoodEvent->SetBinContent(2,934);
+   hisgoodEvent->SetBinContent(2,294633);
    hisgoodEvent->SetBarWidth(0.9);
-   hisgoodEvent->SetEntries(630741);
+   hisgoodEvent->SetEntries(924440);
    hisgoodEvent->SetStats(0);
    hisgoodEvent->SetFillColor(38);
 
