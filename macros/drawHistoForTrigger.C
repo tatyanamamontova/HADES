@@ -32,12 +32,17 @@ TH1F* hTrig = new TH1F("hCuts", "Event cuts; ; Events", nTriggers+1, 0, nTrigger
 
 
 int entry=0;
+int count;
 while(entry < ch->GetEntries()) {
     ch->GetEntry(entry);
-
+    count = 0;
     for (Int_t i = 0; i < nTriggers; i++){
-        if(trigInd[i]) hTrig->Fill(i+0.5);
-        else hTrig->Fill(nTriggers+0.5);
+        if(trigInd[i]){
+	 hTrig->Fill(i+0.5);
+	 count++;}
+		}
+ 
+       if(count == 0) hTrig->Fill(nTriggers+0.5);
 	}
     
     entry++;
