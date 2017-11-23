@@ -184,7 +184,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("nTofHitsCut",        &nTofHitsCut,       "nTofHitsCut/I");
     tree->Branch("primaryTracks",      &primaryTracks,     "primaryTracks/I");
     tree->Branch("selectedTracks",     &selectedTracks,    "selectedTracks/I");
-    tree->Branch("trigInd",            &trigInd,           TString::Format("trigInd[%i]/isWallHitOk", nTriggers));
+    tree->Branch("trigInd",            &trigInd,           TString::Format("trigInd[%i]/O", nTriggers));
     tree->Branch("runId",              &runId,             "runId/S");
 
     tree->Branch("cuts",             cuts,            TString::Format("cuts[%i]/O", nCuts));
@@ -291,11 +291,11 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         cuts[7] = evtInfo->isGoodEvent(Particle::kGoodSTARTMETA);
 
         //get Run number
-        runId = gHades->getRuntimeDb()->getCurrentRun()->getRunId();
+        //runId = gHades->getRuntimeDb()->getCurrentRun()->getRunId();
         
         //get type of trigger
         for (Int_t k = 0; k < nTriggers; k++){
-            trigInd[k] = gHades->getCurrentEvent()->getHeader()->isTBit(k+11);
+            if (gHades->getCurrentEvent()->getHeader()->isTBit(k+11)) trigInd[k] = kTRUE;
         }
         
         //get primary vertex
