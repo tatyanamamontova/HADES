@@ -197,7 +197,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("wallHitRing",         wallHitRing,            TString::Format("wallHitRing[%i]/S", nWallHitsTot));
     tree->Branch("wallHitPhi",          wallHitPhi,             TString::Format("wallHitPhi[%i]/S", nWallHitsTot));
     tree->Branch("isWallHitOk",         isWallHitOk,            TString::Format("isWallHitOk[%i]/S", nWallHitsTot));
-    tree->Branch("wallChargeTot_mod",   wallChargeTot_mod,      TString::Format("wallChargeTot_mod[%i]/S", nModules))
+    tree->Branch("wallChargeTot_mod",   wallChargeTot_mod,      TString::Format("wallChargeTot_mod[%i]/S", nModules));
     tree->Branch("wallChargeTot",       &wallChargeTot,         "wallChargeTot/F");
     tree->Branch("wallChargeTot_ring",  wallChargeTot_ring,     TString::Format("wallChargeTot_ring[%i]/S", nRings));
   
@@ -295,7 +295,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         
         //get type of trigger
         for (Int_t k = 0; k < nTriggers; k++){
-            trigInd[k] = gHades->getCurrentEvent()->getHeader()->IsTBit(k+11);
+            trigInd[k] = gHades->getCurrentEvent()->getHeader()->isTBit(k+11);
         }
         
         //get primary vertex
