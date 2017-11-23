@@ -47,14 +47,24 @@ while(entry < ch->GetEntries()) {
 
 
 canv = new TCanvas();
-leg = new TLegend(0.7,0.7,0.9,0.9);
 hTOFPT2->SetLineColor(2);
 hTOFPT3->SetLineColor(3);
+hTOFPT3->SetStats(0);
+hTOFPT2->SetStats(0);
+hTOFPT2->Draw();
+hTOFPT3->Draw("same");
+
+
+
+leg = new TLegend(0.2,0.15,0.9,0.9);
+leg->SetFillColor(0);
+leg->SetBorderSize(0);
+leg->SetTextSize(0.03);
+leg->SetTextFont(42);
 leg->AddEntry(hTOFPT2, "PT2", "l");
 leg->AddEntry(hTOFPT3, "PT3", "l");
 leg->Draw();
-hTOFPT2->Draw("same");
-hTOFPT3->Draw("same");
+
 sprintf(picName, "./pics/TOF.png");
 canv->SaveAs(picName);
 sprintf(picName, "./pics/TOF.C");
