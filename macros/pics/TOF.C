@@ -1,6 +1,6 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Thu Nov 23 18:39:37 2017) by ROOT version5.34/34
+//=========  (Thu Nov 23 18:47:29 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
    c1->Range(-15,-2467.763,135,22209.86);
    c1->SetFillColor(0);
@@ -237,6 +237,32 @@
    hTof->GetZaxis()->SetTitleSize(0.035);
    hTof->GetZaxis()->SetTitleFont(42);
    hTof->Draw("same");
+   
+   TLegend *leg = new TLegend(0.2,0.15,0.9,0.9,NULL,"brNDC");
+   leg->SetBorderSize(0);
+   leg->SetTextSize(0.03);
+   leg->SetLineColor(1);
+   leg->SetLineStyle(1);
+   leg->SetLineWidth(1);
+   leg->SetFillColor(0);
+   leg->SetFillStyle(1001);
+   TLegendEntry *entry=leg->AddEntry("hTof","PT2","l");
+   entry->SetLineColor(2);
+   entry->SetLineStyle(1);
+   entry->SetLineWidth(1);
+   entry->SetMarkerColor(1);
+   entry->SetMarkerStyle(21);
+   entry->SetMarkerSize(1);
+   entry->SetTextFont(42);
+   entry=leg->AddEntry("hTof","PT3","l");
+   entry->SetLineColor(3);
+   entry->SetLineStyle(1);
+   entry->SetLineWidth(1);
+   entry->SetMarkerColor(1);
+   entry->SetMarkerStyle(21);
+   entry->SetMarkerSize(1);
+   entry->SetTextFont(42);
+   leg->Draw();
    
    TPaveText *pt = new TPaveText(0.3592529,0.94,0.6407471,0.995,"blNDC");
    pt->SetName("title");
