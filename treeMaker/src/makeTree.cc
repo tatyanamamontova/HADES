@@ -103,6 +103,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     const Int_t nModules = 304;              //number of modules in FW
     const Int_t nTriggers = 4;               //triggers PT1-4
 
+
     //Hits
     Int_t nRpcClust;                         //number of RPC hits   
     Int_t nRpcClustCut;                      //number of RPC hits with time cut
@@ -112,6 +113,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Int_t selectedTracks;                    //number of selected tracks
     Bool_t trigInd[nTriggers];               //type of trigger
     Short_t runId;                           //run number
+    Short_t nWallHitsTot;                    //total number of FW Hits
    
     //FW hits
     const Short_t maxNWallHits = 200;        //maximal number of FW hits
@@ -155,6 +157,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Float_t theta[maxNTracks];
     Float_t pt[maxNTracks];
     Float_t rapidity[maxNTracks];
+    Float_t eta[maxNTracks];
     Float_t beta[maxNTracks];
     Float_t mass[maxNTracks];
     Short_t charge[maxNTracks];
@@ -186,6 +189,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("selectedTracks",     &selectedTracks,    "selectedTracks/I");
     tree->Branch("trigInd",            &trigInd,           TString::Format("trigInd[%i]/O", nTriggers));
     tree->Branch("runId",              &runId,             "runId/S");
+    tree->Branch("nWallHitsTot",       &nWallHitsTot,      "nWallHitsTot/S");
 
     tree->Branch("cuts",             cuts,            TString::Format("cuts[%i]/O", nCuts));
    
@@ -223,6 +227,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("theta",    theta,    "theta[nTracks]/F");
     tree->Branch("pt",       pt,       "pt[nTracks]/F");
     tree->Branch("rapidity", rapidity, "rapidity[nTracks]/F");
+    tree->Branch("eta",      eta,      "eta[nTracks]/F");
     tree->Branch("beta",     beta,     "beta[nTracks]/F");
     tree->Branch("mass",     mass,     "mass[nTracks]/F");
     tree->Branch("charge",   charge,   "charge[nTracks]/S");
@@ -409,6 +414,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
             Float_t pz = p[itr] * TMath::Cos( theta[itr] );
             Float_t e_lab = TMath::Sqrt( mass[itr]*mass[itr] + p[itr]*p[itr] );
             rapidity[itr] = 0.5 * TMath::Log( (e_lab + pz)/(e_lab - pz) ) - Y_BEAM;
+            eta[itr] = -TMath::Log(TMath::Tan(theta[itrack]/2));
             
             if (pid[itr]>=0) {
                 p_corr[itr] = cand->getCorrectedMomentumPID(pid[itr]);        // retrieve corrected mom
