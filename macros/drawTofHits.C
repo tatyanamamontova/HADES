@@ -63,13 +63,8 @@ leg->SetTextSize(0.03);
 leg->SetTextFont(42);
 leg->AddEntry(hTOFPT2, "PT2", "l");
 leg->AddEntry(hTOFPT3, "PT3", "l");
-leg->Draw();
+leg->Draw("same");
 
-leg->AddEntry(hTOFPT2, "PT2", "l");
-leg->AddEntry(hTOFPT3, "PT3", "l");
-leg->Draw();
-hTOFPT2->Draw();
-hTOFPT3->Draw("same");
 sprintf(picName, "./pics/TOF.png");
 canv->SaveAs(picName);
 sprintf(picName, "./pics/TOF.C");
