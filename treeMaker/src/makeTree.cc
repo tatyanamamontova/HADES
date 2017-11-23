@@ -294,7 +294,9 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         //runId = gHades->getRuntimeDb()->getCurrentRun()->getRunId();
         
         //get type of trigger
+
         for (Int_t k = 0; k < nTriggers; k++){
+            trigInd[k] = kFALSE;
             if (gHades->getCurrentEvent()->getHeader()->isTBit(k+11)) trigInd[k] = kTRUE;
         }
         
