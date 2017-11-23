@@ -113,7 +113,6 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Int_t selectedTracks;                    //number of selected tracks
     Bool_t trigInd[nTriggers];               //type of trigger
     Short_t runId;                           //run number
-    Short_t nWallHitsTot;                    //total number of FW Hits
    
     //FW hits
     const Short_t maxNWallHits = 200;        //maximal number of FW hits
@@ -414,7 +413,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
             Float_t pz = p[itr] * TMath::Cos( theta[itr] );
             Float_t e_lab = TMath::Sqrt( mass[itr]*mass[itr] + p[itr]*p[itr] );
             rapidity[itr] = 0.5 * TMath::Log( (e_lab + pz)/(e_lab - pz) ) - Y_BEAM;
-            eta[itr] = -TMath::Log(TMath::Tan(theta[itrack]/2));
+            eta[itr] = -TMath::Log(TMath::Tan(theta[itr]/2));
             
             if (pid[itr]>=0) {
                 p_corr[itr] = cand->getCorrectedMomentumPID(pid[itr]);        // retrieve corrected mom
