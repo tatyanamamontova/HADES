@@ -13,7 +13,7 @@
 #include "TFile.h"
 #include "TChain.h"
 
-void drawHistoForGoodEvent(char* input) {
+void drawHistoForTrigger(char* input) {
 
 TChain *ch = new TChain;
 char picName[200];
