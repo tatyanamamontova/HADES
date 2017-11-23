@@ -41,18 +41,17 @@ TH1F* hisgoodEvent = new TH1F("hisgoodEvent", "All cuts; ; Events", 2, -0.5, 1.5
 
 
 int entry=0;
+int count;
+
 while(entry < ch->GetEntries()) {
     ch->GetEntry(entry);
-
+    count = 0;
     for (Int_t i = 0; i < nCuts; i++){
-        if(cuts[i]) {
-            hCuts->Fill(i+0.5);
-        }
-        else {
-            hisgoodEvent->Fill(1);
-        }
+        if(cuts[i]) hCuts->Fill(i+0.5);
+        else count++;
 
     }
+    if (count == nCuts) hisgoodEvent->Fill(1);
     hisgoodEvent->Fill(0);
     entry++;
 }
