@@ -1,4 +1,4 @@
-//@brief Scripts for drawing cuts variables
+//@brief Scripts for drawing trig variables
 //@author T.Mamontova
 //@date 20.11.17
 //@param tree without .root
@@ -12,8 +12,10 @@
 #include <TNtuple.h>
 #include "TFile.h"
 #include "TChain.h"
+#include "TCanvas.h"
+#include "TLegend.h"
 
-void drawHistoForGoodEvent(char* input) {
+void drawHistoForTrigger(char* input) {
 
 TChain *ch = new TChain;
 char picName[200];
@@ -45,12 +47,12 @@ string cutName[nTriggers] = {"PT1","PT2","PT3","PT4"};
 canv = new TCanvas();
 leg = new TLegend(0.7,0.7,0.9,0.9);
 for (Int_t i=0; i < nTriggers; i++) { 
-    hCuts->GetXaxis()->SetBinLabel(i+1,cutName[i].c_str());
+    hTrig->GetXaxis()->SetBinLabel(i+1,cutName[i].c_str());
 }
-hCuts->SetFillColor(38);
-hCuts->SetBarWidth(0.9);
-hCuts->SetStats(0);
-hCuts->Draw("b");
+hTrig->SetFillColor(38);
+hTrig->SetBarWidth(0.9);
+hTrig->SetStats(0);
+hTrig->Draw("b");
 sprintf(picName, "./pics/Triggers_%s.png", input);
 canv->SaveAs(picName);
 sprintf(picName, "./pics/Triggers_%s.C", input);
