@@ -23,7 +23,7 @@ char trees[200];
 sprintf(trees, "%s.root/tree", input);
 ch->Add(trees);
 
-const Short_t nTriggers = 8;
+const Short_t nTriggers = 4;
 Bool_t trigInd[nTriggers];
 
 ch->SetBranchAddress("trigInd", trigInd);
@@ -36,8 +36,8 @@ while(entry < ch->GetEntries()) {
     ch->GetEntry(entry);
 
     for (Int_t i = 0; i < nTriggers; i++){
-        if(trigInd[i]) hTrig->Fill(i+0.5);     
-    }
+        if(trigInd[i]) hTrig->Fill(i+0.5);
+}
     
     entry++;
 }
@@ -53,9 +53,9 @@ hTrig->SetFillColor(38);
 hTrig->SetBarWidth(0.9);
 hTrig->SetStats(0);
 hTrig->Draw("b");
-sprintf(picName, "./pics/Triggers_%s.png", input);
+sprintf(picName, "./pics/Triggers.png");
 canv->SaveAs(picName);
-sprintf(picName, "./pics/Triggers_%s.C", input);
+sprintf(picName, "./pics/Triggers.C");
 canv->SaveAs(picName);
 delete canv;
 delete leg;
