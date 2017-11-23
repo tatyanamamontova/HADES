@@ -30,8 +30,8 @@ Int_t nTofHitsCut;
 ch->SetBranchAddress("trigInd", trigInd);
 ch->SetBranchAddress("nTofHitsCut", &nTofHitsCut);
 
-TH1F* hTOFPT2 = new TH1F("hTof", "Tof Hits with PT2; nEvents; nHits", 120, 0, 120);
-TH1F* hTOFPT3 = new TH1F("hTof", "Tof Hits with PT3; nEvents; nHits", 120, 0, 120);
+TH1F* hTOFPT2 = new TH1F("hTof", "Tof Hits with PT; nEvents; nHits", 120, 0, 120);
+TH1F* hTOFPT3 = new TH1F("hTof", "Tof Hits with PT; nEvents; nHits", 120, 0, 120);
 
 
 
@@ -52,11 +52,12 @@ hTOFPT2->SetLineColor(2);
 hTOFPT3->SetLineColor(3);
 leg->AddEntry(hTOFPT2, "PT2", "l");
 leg->AddEntry(hTOFPT3, "PT3", "l");
+leg->Draw();
 hTOFPT2->Draw();
 hTOFPT3->Draw("same");
-sprintf(picName, "./pics/Triggers.png");
+sprintf(picName, "./pics/TOF.png");
 canv->SaveAs(picName);
-sprintf(picName, "./pics/Triggers.C");
+sprintf(picName, "./pics/TOF.C");
 canv->SaveAs(picName);
 delete canv;
 delete leg;
