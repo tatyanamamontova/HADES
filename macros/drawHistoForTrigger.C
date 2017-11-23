@@ -43,7 +43,7 @@ while(entry < ch->GetEntries()) {
 		}
  
        if(count == 0) hTrig->Fill(nTriggers+0.5);
-	}
+	
     
     entry++;
 }
