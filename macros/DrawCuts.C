@@ -42,11 +42,11 @@ TH1F* hCutRejected = new TH1F("hCutRejected", "Rejected Events; ; Events", nCuts
 
 
 int entry=0;
-Bool_t check;
+// Bool_t check;
 while(entry < ch->GetEntries()) {
     ch->GetEntry(entry);
 
-    check = kTRUE;
+    // check = kTRUE;
     for (Int_t i = 0; i < nCuts; i++){
         if(cuts[i]) {
             hCuts->Fill(i+0.5);
@@ -55,14 +55,20 @@ while(entry < ch->GetEntries()) {
             hisgoodEvent->Fill(1);
         }
 
-        for (Int_t j = 0; j < nCuts; j++){
-            if (i != j) check = check && cuts[j];
-            else check = check && !cuts[i];
-        }
-
-        if (check) hCutRejected ->Fill(i+0.5);
-
+        // for (Int_t j = 0; j < nCuts; j++){
+        //     if (i != j) check = check && cuts[j];
+        //     else check = check && !cuts[j];
+        // }
     }
+        // if (check) hCutRejected ->Fill(i+0.5);
+        if (!cuts[0]&&cuts[1]&&cuts[2]&&cuts[3]&&cuts[4]&&cuts[5]&&cuts[6]&&cuts[7]) hCutRejected ->Fill(0.5);
+        if (cuts[0]&&!cuts[1]&&cuts[2]&&cuts[3]&&cuts[4]&&cuts[5]&&cuts[6]&&cuts[7]) hCutRejected ->Fill(1.5);
+        if (cuts[0]&&cuts[1]&&!cuts[2]&&cuts[3]&&cuts[4]&&cuts[5]&&cuts[6]&&cuts[7]) hCutRejected ->Fill(2.5);
+        if (cuts[0]&&cuts[1]&&cuts[2]&&!cuts[3]&&cuts[4]&&cuts[5]&&cuts[6]&&cuts[7]) hCutRejected ->Fill(3.5);
+        if (cuts[0]&&cuts[1]&&cuts[2]&&cuts[3]&&!cuts[4]&&cuts[5]&&cuts[6]&&cuts[7]) hCutRejected ->Fill(4.5);
+        if (cuts[0]&&cuts[1]&&cuts[2]&&cuts[3]&&cuts[4]&&!cuts[5]&&cuts[6]&&cuts[7]) hCutRejected ->Fill(5.5);
+        if (cuts[0]&&cuts[1]&&cuts[2]&&cuts[3]&&cuts[4]&&cuts[5]&&!cuts[6]&&cuts[7]) hCutRejected ->Fill(6.5);
+        if (cuts[0]&&cuts[1]&&cuts[2]&&cuts[3]&&cuts[4]&&cuts[5]&&cuts[6]&&!cuts[7]) hCutRejected ->Fill(7.5);
 
     hisgoodEvent->Fill(0);
     entry++;
