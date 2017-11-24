@@ -71,7 +71,7 @@ int entry=0;
 while(entry < ch->GetEntries()) {
     ch->GetEntry(entry);
 
-    for (Int_t i = 0; i < nTracks; i++){
+    for (Short_t i = 0; i < nTracks; i++){
         hMetaR->Fill(metaMatchRadius[i]);
         hMetaDx->Fill(metaDx[i]);
         hMetaDy->Fill(metaDy[i]);
@@ -84,6 +84,9 @@ while(entry < ch->GetEntries()) {
         P = p[i];
         Delta = p[i]-pCorr[i];
         hPcorr->Fill(P, Delta);
+        std::cout << p[i] <<std::endl;
+        std::cout << Delta << std::endl;
+        std::cout << pCorr << std::endl;
     }
 
     entry++;
