@@ -4,16 +4,15 @@
 //@param tree without .root
 //@return pics with histos
 
-#include "TTree.h"
+#include <TFile.h>
+#include <TTree.h>
+#include <TChain.h>
+#include <TCanvas.h>
+#include <TLegend.h>
+#include <TColor.h>
+#include <TH1F.h>
+#include <TH2F.h>
 #include <iostream>
-#include "TH1F.h"
-#include "TH2F.h"
-#include "TF1.h"
-#include <TNtuple.h>
-#include "TFile.h"
-#include "TChain.h"
-#include "TCanvas.h"
-#include "TLegend.h"
 
 void drawTrackvariables(char* input) {
 
@@ -100,29 +99,27 @@ while(entry < ch->GetEntries()) {
 // delete leg;
 
 canv = new TCanvas();
+leg = new TLegend(0.7,0.7,0.9,0.9);
 hMetaDx->SetLineColor(2);
 hMetaDy->SetLineColor(3);
 hMetaDx->SetStats(0);
 hMetaDy->SetStats(0);
 hMetaDx->Draw();
 hMetaDy->Draw("same");
-
-leg = new TLegend(0.1,0.7,0.48,0.9);
 leg->SetFillColor(0);
 leg->SetBorderSize(0);
 leg->SetTextSize(0.03);
 leg->SetTextFont(38);
-leg->AddEntry(hMetaDx, "MetaDx", "l");
-leg->AddEntry(hMetaDy, "MetaDy", "l");
-leg->Draw();
-
+leg->AddEntry(hMetaDx, "MetaDx", "lp");
+leg->AddEntry(hMetaDy, "MetaDy", "lp");
+leg->Draw("same");
 sprintf(picName, "../results/MetaDxy.png");
 canv->SaveAs(picName);
 sprintf(picName, "../results/MetaDxy.C");
 canv->SaveAs(picName);
 delete canv;
 delete leg;
-
+}
 
 // canv = new TCanvas();
 // hChi2all->SetLineColor(2);
@@ -193,6 +190,6 @@ delete leg;
 // canv->SaveAs(picName);
 // delete canv;
 // delete leg;
-}
+
 
 
