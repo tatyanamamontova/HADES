@@ -177,7 +177,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Float_t rapidity_corr[maxNTracks];
     Float_t metaDx[maxNTracks];
     Float_t metaDy[maxNTracks];
-    Float_t mdcSecId[maxNTracks];
+    Short_t mdcSecId[maxNTracks];
     
     TFile* out = new TFile(outfile.Data(),"RECREATE");
     out->cd();
@@ -241,7 +241,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("DCAxy",    DCAxy,    "DCAxy[nTracks]/F");
     tree->Branch("DCAz",     DCAz,     "DCAz[nTracks]/F");
     tree->Branch("mdcNhits", mdcNhits, "mdcNhits[nTracks]/S");
-    tree->Branch("chi2all",  chi2,     "chi2[nTracks]/F");
+    tree->Branch("chi2all",  chi2all,  "chi2all[nTracks]/F");
     tree->Branch("chi2inner",chi2inner,"chi2inner[nTracks]/F");
     tree->Branch("chi2outer",chi2outer,"chi2outer[nTracks]/F");
     tree->Branch("metaQ",    metaQ,    "metaQ[nTracks]/F");
@@ -428,7 +428,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
             if (pid[itr]>=0) {
                 pCorr[itr] = cand->getCorrectedMomentumPID(pid[itr]);        // retrieve corrected mom
                 cand->setMomentum(pCorr[itr]);                                   // write it back
-                cand->calc4vectorProperties(HPhysicsConstants::pCorr(pid[itr]));   // sync with lorentz vector
+                cand->calc4vectorProperties(HPhysicsConstants::mass(pid[itr]));   // sync with lorentz vector
             }
             
             pCorr[itr] = cand->getMomentum();
@@ -448,9 +448,9 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
             metaDx[itr] = cand->getRkMetaDx();
             metaDy[itr] = cand->getRkMetaDy(); 
             metaMatchRadius[itr] = cand->getMetaMatchRadius();
-            mdcSecId = cand->getSector();
+            mdcSecId[itr] = cand->getSector();
             pz = pCorr[itr] * TMath::Cos( theta[itr] );
-            Float_t pidMass = (pid[itr]>=0) ? HPhysicsConstants::Mass(pid[itr]) : metaMass[itr];
+            Float_t pidMass = (pid[itr]>=0) ? HPhysicsConstants::mass(pid[itr]) : metaMass[itr];
             e_lab = TMath::Sqrt( pidMass*pidMass + pCorr[itr]*pCorr[itr] );
             rapidity_corr[itr] = 0.5 * TMath::Log( (e_lab + pz)/(e_lab - pz) ) - Y_BEAM;
 

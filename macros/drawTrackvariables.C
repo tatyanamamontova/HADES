@@ -35,7 +35,7 @@ Float_t metaMatchRadius[maxNTracks];
 Float_t pCorr[maxNTracks];
 Float_t metaDx[maxNTracks];
 Float_t metaDy[maxNTracks];
-Float_t mdcSecId[maxNTracks];
+Short_t mdcSecId[maxNTracks];
 Float_t vZ;
 
 ch->SetBranchAddress("nTracks", &nTracks);
