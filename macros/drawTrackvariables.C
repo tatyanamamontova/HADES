@@ -93,7 +93,11 @@ while(entry < ch->GetEntries()) {
         P = p[i];
         Delta = TMath::Abs(p[i]-pCorr[i]);
         hPcorr->Fill(P, Delta);
-        if (theta[i] == 1.2) hMassTOF->Fill(metaMass[i]);
+        if (theta[i] == 1.2) 
+            {
+                std::cout << theta[i] << "" << metaMass[i] <<std::endl;
+                hMassTOF->Fill(metaMass[i]);}
+                
         if (theta[i] == 0.4) hMassRPC->Fill(metaMass[i]);
     }
 
