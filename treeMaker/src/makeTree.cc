@@ -19,6 +19,7 @@
 #include "walldef.h"
 #include <hruntimedb.h>
 #include <hrun.h>
+#include <heventheader.h>
 
 #include "TString.h"
 #include "TROOT.h"
@@ -113,6 +114,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Int_t selectedTracks;                    //number of selected tracks
     Bool_t trigInd[nTriggers];               //type of trigger
     Short_t runId;                           //run number
+    Float_t runTime;                         //run time
    
     //FW hits
     const Short_t maxNWallHits = 200;        //maximal number of FW hits
@@ -157,22 +159,25 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Float_t pt[maxNTracks];
     Float_t rapidity[maxNTracks];
     Float_t eta[maxNTracks];
-    Float_t beta[maxNTracks];
-    Float_t mass[maxNTracks];
+    Float_t metaBeta[maxNTracks];
+    Float_t metaMass[maxNTracks];
     Short_t charge[maxNTracks];
-    Float_t dEdxMdc[maxNTracks];
-    Float_t dEdxTof[maxNTracks];
-    Float_t rToBeam[maxNTracks];
-    Float_t zToBeam[maxNTracks];
-    Short_t nMdcHits[maxNTracks];
-    Float_t chi2[maxNTracks];
+    Float_t mdcdEdx[maxNTracks];
+    Float_t tofdEdx[maxNTracks];
+    Float_t DCAxy[maxNTracks];
+    Float_t DCAz[maxNTracks];
+    Short_t mdcNhits[maxNTracks];
+    Float_t chi2all[maxNTracks];
     Float_t chi2inner[maxNTracks];
     Float_t chi2outer[maxNTracks];
-    Float_t metaMatchQuality[maxNTracks];
+    Float_t metaQ[maxNTracks];
     Float_t metaMatchRadius[maxNTracks];
-    Float_t p_corr[maxNTracks];
+    Float_t pCorr[maxNTracks];
     Float_t pt_corr[maxNTracks];
     Float_t rapidity_corr[maxNTracks];
+    Float_t metaDx[maxNTracks];
+    Float_t metaDy[maxNTracks];
+    Float_t mdcSecId[maxNTracks];
     
     TFile* out = new TFile(outfile.Data(),"RECREATE");
     out->cd();
@@ -189,6 +194,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("trigInd",            &trigInd,           TString::Format("trigInd[%i]/O", nTriggers));
     tree->Branch("runId",              &runId,             "runId/S");
     tree->Branch("nWallHitsTot",       &nWallHitsTot,      "nWallHitsTot/S");
+    tree->Branch("runTime",            &runTime,           "runTime/F");
 
     tree->Branch("cuts",             cuts,            TString::Format("cuts[%i]/O", nCuts));
    
@@ -227,22 +233,25 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("pt",       pt,       "pt[nTracks]/F");
     tree->Branch("rapidity", rapidity, "rapidity[nTracks]/F");
     tree->Branch("eta",      eta,      "eta[nTracks]/F");
-    tree->Branch("beta",     beta,     "beta[nTracks]/F");
-    tree->Branch("mass",     mass,     "mass[nTracks]/F");
+    tree->Branch("metaBeta", metaBeta, "metaBeta[nTracks]/F");
+    tree->Branch("metaMass", metaMass, "metaMass[nTracks]/F");
     tree->Branch("charge",   charge,   "charge[nTracks]/S");
-    tree->Branch("dEdxMdc",  dEdxMdc,  "dEdxMdc[nTracks]/F");
-    tree->Branch("dEdxTof",  dEdxTof,  "dEdxTof[nTracks]/F");
-    tree->Branch("rToBeam",  rToBeam,  "rToBeam[nTracks]/F");
-    tree->Branch("zToBeam",  zToBeam,  "zToBeam[nTracks]/F");
-    tree->Branch("nMdcHits", nMdcHits, "nMdcHits[nTracks]/S");
-    tree->Branch("chi2",     chi2,     "chi2[nTracks]/F");
+    tree->Branch("mdcdEdx",  mdcdEdx,  "mdcdEdx[nTracks]/F");
+    tree->Branch("tofdEdx",  tofdEdx,  "tofdEdx[nTracks]/F");
+    tree->Branch("DCAxy",    DCAxy,    "DCAxy[nTracks]/F");
+    tree->Branch("DCAz",     DCAz,     "DCAz[nTracks]/F");
+    tree->Branch("mdcNhits", mdcNhits, "mdcNhits[nTracks]/S");
+    tree->Branch("chi2all",  chi2,     "chi2[nTracks]/F");
     tree->Branch("chi2inner",chi2inner,"chi2inner[nTracks]/F");
     tree->Branch("chi2outer",chi2outer,"chi2outer[nTracks]/F");
-    tree->Branch("metaMatchQuality", metaMatchQuality, "metaMatchQuality[nTracks]/F");
+    tree->Branch("metaQ",    metaQ,    "metaQ[nTracks]/F");
     tree->Branch("metaMatchRadius",  metaMatchRadius,  "metaMatchRadius[nTracks]/F");
-    tree->Branch("p_corr",   p_corr,   "p_corr[nTracks]/F");
+    tree->Branch("pCorr",    pCorr,   "pCorr[nTracks]/F");
     tree->Branch("pt_corr",  pt_corr,  "pt_corr[nTracks]/F");
     tree->Branch("rapidity_corr", rapidity_corr,"rapidity_corr[nTracks]/F");
+    tree->Branch("metaDx",   metaDx,    "metaDx[nTracks]/F");
+    tree->Branch("metaDy",   metaDx,    "metaDy[nTracks]/F");
+    tree->Branch("mdcSecId", mdcSecId,  "mdcSecId[nTracks]/F");
     
 
     //#######################################################################
@@ -295,7 +304,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         cuts[7] = evtInfo->isGoodEvent(Particle::kGoodSTARTMETA);
 
         //get Run number
-        //runId = gHades->getRuntimeDb()->getCurrentRun()->getRunId();
+        runId = gHades->getCurrentEvent()->getHeader()->getEventRunNumber();
+        runTime = gHades->getCurrentEvent()->getHeader()->getTime();
         
         //get type of trigger
 
@@ -409,36 +419,39 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
             p[itr] = cand->getMomentum();
             theta[itr] = cand->getTheta()*D2R;
             pt[itr] = p[itr] * TMath::Sin( theta[itr] ); 
-            mass[itr] = cand->getMass();
+            metaMass[itr] = cand->getMass();
             Float_t pz = p[itr] * TMath::Cos( theta[itr] );
-            Float_t e_lab = TMath::Sqrt( mass[itr]*mass[itr] + p[itr]*p[itr] );
+            Float_t e_lab = TMath::Sqrt( metaMass[itr]*metaMass[itr] + p[itr]*p[itr] );
             rapidity[itr] = 0.5 * TMath::Log( (e_lab + pz)/(e_lab - pz) ) - Y_BEAM;
             eta[itr] = -TMath::Log(TMath::Tan(theta[itr]/2));
             
             if (pid[itr]>=0) {
-                p_corr[itr] = cand->getCorrectedMomentumPID(pid[itr]);        // retrieve corrected mom
-                cand->setMomentum(p_corr[itr]);                                   // write it back
-                cand->calc4vectorProperties(HPhysicsConstants::mass(pid[itr]));   // sync with lorentz vector
+                pCorr[itr] = cand->getCorrectedMomentumPID(pid[itr]);        // retrieve corrected mom
+                cand->setMomentum(pCorr[itr]);                                   // write it back
+                cand->calc4vectorProperties(HPhysicsConstants::pCorr(pid[itr]));   // sync with lorentz vector
             }
             
-            p_corr[itr] = cand->getMomentum();
-            pt_corr[itr] = p_corr[itr] * TMath::Sin( theta[itr] );                        
+            pCorr[itr] = cand->getMomentum();
+            pt_corr[itr] = pCorr[itr] * TMath::Sin( theta[itr] );                        
             phi[itr] = cand->getPhi()*D2R;
-            beta[itr] = cand->getBeta();
+            metaBeta[itr] = cand->getBeta();
             charge[itr] = cand->getCharge();
-            nMdcHits[itr] = cand->getNLayer(2);//inner+outer
-            dEdxMdc[itr] = cand->getMdcdEdx();
-            dEdxTof[itr] = cand->getTofdEdx();
-            rToBeam[itr] = cand->getR();
-            zToBeam[itr] = cand->getZ();
-            chi2[itr] = cand->getChi2();
+            mdcNhits[itr] = cand->getNLayer(2);//inner+outer
+            mdcdEdx[itr] = cand->getMdcdEdx();
+            tofdEdx[itr] = cand->getTofdEdx();
+            DCAxy[itr] = cand->getR();
+            DCAz[itr] = cand->getZ();
+            chi2all[itr] = cand->getChi2();
             chi2inner[itr] = cand->getInnerSegmentChi2();
             chi2outer[itr] = cand->getOuterSegmentChi2();
-            metaMatchQuality[itr] = cand->getMetaMatchQuality();
+            metaQ[itr] = cand->getMetaMatchQuality();
+            metaDx[itr] = cand->getRkMetaDx();
+            metaDy[itr] = cand->getRkMetaDy(); 
             metaMatchRadius[itr] = cand->getMetaMatchRadius();
-            pz = p_corr[itr] * TMath::Cos( theta[itr] );
-            Float_t pidMass = (pid[itr]>=0) ? HPhysicsConstants::mass(pid[itr]) : mass[itr];
-            e_lab = TMath::Sqrt( pidMass*pidMass + p_corr[itr]*p_corr[itr] );
+            mdcSecId = cand->getSector();
+            pz = pCorr[itr] * TMath::Cos( theta[itr] );
+            Float_t pidMass = (pid[itr]>=0) ? HPhysicsConstants::Mass(pid[itr]) : metaMass[itr];
+            e_lab = TMath::Sqrt( pidMass*pidMass + pCorr[itr]*pCorr[itr] );
             rapidity_corr[itr] = 0.5 * TMath::Log( (e_lab + pz)/(e_lab - pz) ) - Y_BEAM;
 
             if( pid[itr]==14 ) nProtons++;
@@ -453,8 +466,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
 
             //track cuts for MDC Q-vectors
             /*if ( pid[itr]==14 && pt_corr[itr]>250 && pt_corr[itr]<1700 &&
-                 TMath::Abs(zToBeam[itr]-vZ)<15. && TMath::Abs(rToBeam[itr])<15. &&
-                 beta[itr]<1 && mass[itr]>600 && mass[itr]<1200) */
+                 TMath::Abs(DCAz[itr]-vZ)<15. && TMath::Abs(DCAxy[itr])<15. &&
+                 beta[itr]<1 && metaMass[itr]>600 && metaMass[itr]<1200) */
 
         } // end cand loop
         
