@@ -1,8 +1,8 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Fri Nov 24 15:54:25 2017) by ROOT version5.34/34
+//=========  (Fri Nov 24 16:57:42 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
-   c1->Range(-1.25,260981.2,6.25,304918.5);
+   c1->Range(-1.25,2920627,6.25,3495804);
    c1->SetFillColor(0);
    c1->SetBorderMode(0);
    c1->SetBorderSize(2);
@@ -10,13 +10,13 @@
    c1->SetFrameBorderMode(0);
    
    TH1F *hSecId = new TH1F("hSecId","Sector information from MDC",6,-0.5,5.5);
-   hSecId->SetBinContent(1,288149);
-   hSecId->SetBinContent(2,286400);
-   hSecId->SetBinContent(3,298851);
-   hSecId->SetBinContent(4,275662);
-   hSecId->SetBinContent(5,266969);
-   hSecId->SetBinContent(6,297140);
-   hSecId->SetEntries(1713171);
+   hSecId->SetBinContent(1,3250844);
+   hSecId->SetBinContent(2,3246140);
+   hSecId->SetBinContent(3,3375528);
+   hSecId->SetBinContent(4,3107021);
+   hSecId->SetBinContent(5,2999013);
+   hSecId->SetBinContent(6,3416375);
+   hSecId->SetEntries(1.939492e+07);
    
    TPaveStats *ptstats = new TPaveStats(0.78,0.775,0.98,0.935,"brNDC");
    ptstats->SetName("stats");
@@ -26,9 +26,9 @@
    ptstats->SetTextFont(42);
    TText *text = ptstats->AddText("hSecId");
    text->SetTextSize(0.0368);
-   text = ptstats->AddText("Entries = 1713171");
-   text = ptstats->AddText("Mean  =  2.489");
-   text = ptstats->AddText("RMS   =  1.716");
+   text = ptstats->AddText("Entries =   1.939492e+07");
+   text = ptstats->AddText("Mean  =  2.495");
+   text = ptstats->AddText("RMS   =  1.719");
    ptstats->SetOptStat(1111);
    ptstats->SetOptFit(0);
    ptstats->Draw();

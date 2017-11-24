@@ -113,8 +113,8 @@ while(entry < ch->GetEntries()) {
 
         if (theta[i] == 0.4) hMassRPC->Fill(metaMass[i]);
         hPtPolar->Fill(pt[i]*TMath::Cos(phi[i]), pt[i]*TMath::Sin(phi[i]));
-        px_sum += pt[i]*TMath::Cos(phi[i]);
-        py_sum += pt[i]*TMath::Sin(phi[i])
+        px_sum =px_sum+pt[i]*TMath::Cos(phi[i]);
+        py_sum =py_sum+pt[i]*TMath::Sin(phi[i]);
 
     }
     hPtSum->Fill(px_sum, py_sum);
