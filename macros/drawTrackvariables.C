@@ -12,6 +12,8 @@
 #include <TNtuple.h>
 #include "TFile.h"
 #include "TChain.h"
+#include "TCanvas.h"
+#include "TLegend.h"
 
 void drawTrackvariables(char* input) {
 
