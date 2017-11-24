@@ -38,6 +38,8 @@ Float_t metaDx[maxNTracks];
 Float_t metaDy[maxNTracks];
 Short_t mdcSecId[maxNTracks];
 Float_t vZ;
+Float_t P;
+Float_t Delta;
 
 ch->SetBranchAddress("nTracks", &nTracks);
 ch->SetBranchAddress("metaMatchRadius", metaMatchRadius);
@@ -79,7 +81,9 @@ while(entry < ch->GetEntries()) {
         hDCAxy->Fill(DCAxy[i]);
         hDCAz->Fill(DCAz[i]-vZ);
         hSecId->Fill(mdcSecId[i]);
-        hPcorr->Fill(p[i], p[i]-pCorr[i]);
+        P = p[i];
+        Delta = p[i]-pCorr[i];
+        hPcorr->Fill(P, Delta);
     }
 
     entry++;
@@ -180,9 +184,9 @@ delete canv;
 delete leg;
 
 delete hMetaR;
-delete  hMetaDx;
-delete  hMetaDy;
-delete  hChi2all;
+delete hMetaDx;
+delete hMetaDy;
+delete hChi2all;
 delete hChi2in;
 delete hChi2out;
 delete hDCAxy;
