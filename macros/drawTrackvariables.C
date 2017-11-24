@@ -65,7 +65,7 @@ TH1F* hChi2out = new TH1F("hChi2out", "MDC outer segment fitter #chi^2; #chi^2; 
 TH1F* hDCAxy = new TH1F("hDCAxy", "Distance of closest point to beamline; r[mm]; nTracks", 100, -50, 50);
 TH1F* hDCAz = new TH1F("hDCAz", "Z coordinate of closest point to beamline - Zvertex[mm]; z-Vz[mm]; nTracks", 100, -50, 50);
 TH1F* hSecId = new TH1F("hSecId", "Sector information from MDC; nSector; nTracks", 6, -0.5, 5.5);
-TH2F* hPcorr = new TH2F("hPcorr", "#frac{p-p_{corr}}{p} vs p; p [Mev/c]; #Delta p/p; nTracks", 1000, 0, 2000, 100, 0, 0.1);
+TH2F* hPcorr = new TH2F("hPcorr", "p-p_{corr} vs p; p [Mev/c]; #Delta p/p; nTracks", 1000, 0, 2000, 100, 0, 0.1);
 
 
 int entry=0;
@@ -82,7 +82,7 @@ while(entry < ch->GetEntries()) {
         hDCAxy->Fill(DCAxy[i]);
         hDCAz->Fill(DCAz[i]-vZ);
         hSecId->Fill(mdcSecId[i]);
-        hPcorr->Fill(p[i], (p[i]-pCorr[i])/p[i]);
+        hPcorr->Fill(p[i], p[i]-pCorr[i]);
     }
 
     entry++;
@@ -112,8 +112,8 @@ leg->SetFillColor(0);
 leg->SetBorderSize(0);
 leg->SetTextSize(0.03);
 leg->SetTextFont(38);
-leg->AddEntry(hMetaDx, "MetaDx", "l");
-leg->AddEntry(hMetaDy, "MetaDy", "l");
+leg->AddEntry("hMetaDx", "MetaDx", "l");
+leg->AddEntry("hMetaDy", "MetaDy", "l");
 leg->Draw();
 
 sprintf(picName, "../results/MetaDxy.png");
@@ -140,9 +140,9 @@ leg->SetFillColor(0);
 leg->SetBorderSize(0);
 leg->SetTextSize(0.03);
 leg->SetTextFont(38);
-leg->AddEntry(hChi2all, "Chi2all", "l");
-leg->AddEntry(hChi2in, "Chi2inner", "l");
-leg->AddEntry(hChi2out, "Chi2out", "l");
+leg->AddEntry("hChi2all", "Chi2all", "l");
+leg->AddEntry("hChi2in", "Chi2inner", "l");
+leg->AddEntry("hChi2out", "Chi2out", "l");
 leg->Draw();
 
 sprintf(picName, "../results/Chi2.png");
