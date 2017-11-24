@@ -10,7 +10,8 @@
 
 void drawMass(char* input){
 
-	
+    TCanvas* canv;
+    TLegend* leg;	
 	TChain *ch = new TChain;
     char picName[200];
     char trees[200];

@@ -4,19 +4,20 @@
 //@param tree without .root
 //@return pics with histos
 
-#include "TTree.h"
+#include <TFile.h>
+#include <TTree.h>
+#include <TChain.h>
+#include <TCanvas.h>
+#include <TLegend.h>
+#include <TColor.h>
+#include <TH1F.h>
+#include <TH2F.h>
 #include <iostream>
-#include "TH1F.h"
-#include "TH2F.h"
-#include "TF1.h"
-#include <TNtuple.h>
-#include "TFile.h"
-#include "TChain.h"
-#include "TCanvas.h"
-#include "TLegend.h"
 
 void drawTofHits(char* input) {
 
+TCanvas* canv;
+TLegend* leg;
 TChain *ch = new TChain;
 char picName[200];
 char trees[200];
