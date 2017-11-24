@@ -1,0 +1,194 @@
+//@brief Scripts for drawing cuts variables
+//@author T.Mamontova
+//@date 20.11.17
+//@param tree without .root
+//@return pics with histos
+
+#include "TTree.h"
+#include <iostream>
+#include "TH1F.h"
+#include "TH2F.h"
+#include "TF1.h"
+#include <TNtuple.h>
+#include "TFile.h"
+#include "TChain.h"
+
+void drawTrackvariables(char* input) {
+
+TChain *ch = new TChain;
+char picName[200];
+char trees[200];
+sprintf(trees, "%s.root/tree", input);
+ch->Add(trees);
+
+const Short_t maxNTracks = 200;
+Short_t nTracks;
+Short_t pid[maxNTracks];
+Float_t p[maxNTracks];
+Float_t DCAxy[maxNTracks];
+Float_t DCAz[maxNTracks];
+Float_t chi2all[maxNTracks];
+Float_t chi2inner[maxNTracks];
+Float_t chi2outer[maxNTracks];
+Float_t metaQ[maxNTracks];
+Float_t metaMatchRadius[maxNTracks];
+Float_t pCorr[maxNTracks];
+Float_t metaDx[maxNTracks];
+Float_t metaDy[maxNTracks];
+Float_t mdcSecId[maxNTracks];
+Float_t vZ;
+
+ch->SetBranchAddress("nTracks", &nTracks);
+ch->SetBranchAddress("metaMatchRadius", metaMatchRadius);
+ch->SetBranchAddress("metaDx", metaDx);
+ch->SetBranchAddress("metaDy", metaDy);
+ch->SetBranchAddress("chi2all", chi2all);
+ch->SetBranchAddress("chi2inner", chi2inner);
+ch->SetBranchAddress("DCAxy", DCAxy);
+ch->SetBranchAddress("DCAz", DCAz);
+ch->SetBranchAddress("mdcSecId", mdcSecId);
+ch->SetBranchAddress("pCorr", pCorr);
+ch->SetBranchAddress("p", p);
+ch->SetBranchAddress("vZ", &vZ);
+
+
+TH1F* hMetaR = new TH1F("hMetaR", "Distance of the outer segment to the meta hit ; r[mm];nTracks", 1000, 0, 100);
+TH1F* hMetaDx = new TH1F("hMetaDx", "Distance in X of the outer segment to the meta hit; x[mm]; nTracks", 1000, 0, 100);
+TH1F* hMetaDy = new TH1F("hMetaDy", "Distance in Y of the outer segment to the meta hit; y[mm]; nTracks", 1000, 0, 100);
+TH1F* hChi2all = new TH1F("hChi2all", "Tracking #chi^2; #chi^2; nTracks", 1000, 0, 200);
+TH1F* hChi2in = new TH1F("hChi2in", "MDC inner segment fitter #chi^2; #chi^2; nTracks", 1000, 0, 200);
+TH1F* hChi2out = new TH1F("hChi2out", "MDC outer segment fitter #chi^2; #chi^2; nTracks", 1000, 0, 200);
+TH1F* hDCAxy = new TH1F("hDCAxy", "Distance of closest point to beamline; r[mm]; nTracks", 100, 0, 50);
+TH1F* hDCAz = new TH1F("hDCAxy", "Z coordinate of closest point to beamline - Zvertex[mm]; z-Vz[mm]; nTracks", 100, -50, 50);
+TH1F* hSecId = new TH1F("hSecId", "Sector information from MDC; nSector; nTracks", 6, -0.5, 5.5);
+TH2F* hPcorr = new TH1F("hPcorr", "#frac{p-p_{corr}}{p} vs p; p [Mev/c]; #Delta p/p; nTracks", 1000, 0, 2000, 100, 0, 1);
+
+
+int entry=0;
+while(entry < ch->GetEntries()) {
+    ch->GetEntry(entry);
+
+    for (Int_t i = 0; i < nTracks; i++){
+        hMetaR->Fill(metaMatchRadius[i]);
+        hMetaDx->Fill(metaDx[i]);
+        hMetaDy->Fill(metaDy[i]);
+        hChi2all->Fill(chi2all[i]);
+        hChi2in->Fill(chi2inner[i]);
+        hChi2out->Fill(chi2outer[i]);
+        hDCAxy->Fill(DCAxy[i]);
+        hDCAz->Fill(DCAz[i]-vZ);
+        hSecId->Fill(mdcSecId[i]);
+        hPcorr->Fill(p[i], (p[i]-pCorr[i])/p[i]);
+    }
+
+    entry++;
+}
+
+
+canv = new TCanvas();
+leg = new TLegend(0.7,0.7,0.9,0.9);
+hMetaR->Draw();
+sprintf(picName, "../results/MetaR.png");
+canv->SaveAs(picName);
+sprintf(picName, "./results/MetaR.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
+
+canv = new TCanvas();
+hMetaDx->SetLineColor(2);
+hMetaDy->SetLineColor(3);
+hMetaDx->SetStats(0);
+hMetaDy->SetStats(0);
+hMetaDx->Draw();
+hMetaDy->Draw("same");
+
+leg = new TLegend(0.2,0.15,0.9,0.9);
+leg->SetFillColor(0);
+leg->SetBorderSize(0);
+leg->SetTextSize(0.03);
+leg->SetTextFont(38);
+leg->AddEntry(hMetaDx, "MetaDx", "l");
+leg->AddEntry(hMetaDy, "MetaDy", "l");
+leg->Draw("same");
+
+sprintf(picName, "../results/MetaDxy.png");
+canv->SaveAs(picName);
+sprintf(picName, "../results/MetaDxy.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
+
+
+canv = new TCanvas();
+hChi2all->SetLineColor(2);
+hChi2in->SetLineColor(3);
+hChi2out->SetLineColor(4);
+hChi2all->SetStats(0);
+hChi2in->SetStats(0);
+hChi2out->SetStats(0);
+hChi2all->Draw();
+hChi2in->Draw("same");
+hChi2out->Draw("same");
+
+leg = new TLegend(0.2,0.15,0.9,0.9);
+leg->SetFillColor(0);
+leg->SetBorderSize(0);
+leg->SetTextSize(0.03);
+leg->SetTextFont(38);
+leg->AddEntry(hChi2all, "Chi2all", "l");
+leg->AddEntry(hChi2in, "Chi2inner", "l");
+leg->AddEntry(hChi2out, "Chi2out", "l");
+leg->Draw("same");
+
+sprintf(picName, "../results/Chi2.png");
+canv->SaveAs(picName);
+sprintf(picName, "../results/Chi2.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
+
+canv = new TCanvas();
+leg = new TLegend(0.7,0.7,0.9,0.9);
+hDCAxy->Draw();
+sprintf(picName, "../results/DCAxy.png");
+canv->SaveAs(picName);
+sprintf(picName, "./results/DCAxy.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
+
+canv = new TCanvas();
+leg = new TLegend(0.7,0.7,0.9,0.9);
+hDCAz->Draw();
+sprintf(picName, "../results/DCAz.png");
+canv->SaveAs(picName);
+sprintf(picName, "./results/DCAz.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
+
+
+canv = new TCanvas();
+leg = new TLegend(0.7,0.7,0.9,0.9);
+hSecId->Draw();
+sprintf(picName, "../results/SecId.png");
+canv->SaveAs(picName);
+sprintf(picName, "./results/SecID.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
+
+canv = new TCanvas();
+leg = new TLegend(0.7,0.7,0.9,0.9);
+hPcorr->Draw("colz");
+hPcorr->SetStats(false);
+sprintf(picName, "./pics/PCorr.png");
+canv->SaveAs(picName);
+sprintf(picName, "./pics/PCorr.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
+}
+
+
