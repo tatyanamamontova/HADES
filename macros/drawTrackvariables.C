@@ -77,8 +77,11 @@ TH1F* hMassRPC = new TH1F("hMassRPC", "Mass for RPC; mass [MeV/c^2]; nTracks", 4
 
 
 int entry=0;
+std::cout << "nEntries = "<< ch->GetEntries() << std::endl;
 while(entry < ch->GetEntries()) {
+
     ch->GetEntry(entry);
+    std::cout << "nTracks = "<<nTracks << std::endl;
 
     for (Short_t i = 0; i < nTracks; i++){
         hMetaR->Fill(metaMatchRadius[i]);
@@ -97,7 +100,7 @@ while(entry < ch->GetEntries()) {
             {
                 std::cout << theta[i] << "" << metaMass[i] <<std::endl;
                 hMassTOF->Fill(metaMass[i]);}
-                
+
         if (theta[i] == 0.4) hMassRPC->Fill(metaMass[i]);
     }
 
