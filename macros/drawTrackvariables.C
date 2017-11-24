@@ -12,6 +12,7 @@
 #include <TColor.h>
 #include <TH1F.h>
 #include <TH2F.h>
+#include <TMath.h>
 #include <iostream>
 
 void drawTrackvariables(char* input) {
@@ -42,6 +43,10 @@ Float_t P;
 Float_t Delta;
 Float_t metaMass[maxNTracks];
 Float_t theta[maxNTracks];
+Float_t pt[maxNTracks];
+Float_t phi[maxNTracks];
+Float_t px_sum;
+Float_t py_sum;
 
 
 ch->SetBranchAddress("nTracks", &nTracks);
@@ -58,6 +63,8 @@ ch->SetBranchAddress("p", p);
 ch->SetBranchAddress("vZ", &vZ);
 ch->SetBranchAddress("metaMass", metaMass);
 ch->SetBranchAddress("theta", theta);
+ch->SetBranchAddress("pt", pt);
+ch->SetBranchAddress("phi", phi);
 
 
 TH1F* hMetaR = new TH1F("hMetaR", "Distance of the outer segment to the meta hit ; r[mm];nTracks", 1000, 0, 100);
@@ -72,6 +79,8 @@ TH1F* hSecId = new TH1F("hSecId", "Sector information from MDC; nSector; nTracks
 TH2F* hPcorr = new TH2F("hPcorr", "Abs(p-p_{corr}) vs p; p [Mev/c]; #Delta p [MeV/c]; nTracks", 100, 0, 2000, 1000, 0, 100);
 TH1F* hMassTOF = new TH1F("hMassTOF", "Mass for TOF; mass [MeV/c^2]; nTracks", 4000, 0, 4000);
 TH1F* hMassRPC = new TH1F("hMassRPC", "Mass for RPC; mass [MeV/c^2]; nTracks", 4000, 0, 4000);
+TH2F* hPtPolar = new TH2F("hPtPolar", "Polar histo for Pt; p_x [Mev/c]; p_y[Mev/c]", 1000, -2000, 2000, 1000, -2000, 2000);
+TH2F* hPtSum = new TH2F("hPtSum", "Polar histo for p_T sum; p_x[MeV/c]; p_y[MeV/c]", 1000, -1000, 1000, 1000, -1000, 1000);
 
 
 
@@ -82,7 +91,8 @@ while(entry < ch->GetEntries()) {
 
     ch->GetEntry(entry);
     std::cout << "nTracks = "<<nTracks << std::endl;
-
+    px_sum = 0;
+    py_sum = 0;
     for (Short_t i = 0; i < nTracks; i++){
         hMetaR->Fill(metaMatchRadius[i]);
         hMetaDx->Fill(metaDx[i]);
@@ -102,8 +112,12 @@ while(entry < ch->GetEntries()) {
                 hMassTOF->Fill(metaMass[i]);}
 
         if (theta[i] == 0.4) hMassRPC->Fill(metaMass[i]);
-    }
+        hPtPolar->Fill(pt[i]*TMath::Cos(phi[i]), pt[i]*TMath::Sin(phi[i]));
+        px_sum += pt[i]*TMath::Cos(phi[i]);
+        py_sum += pt[i]*TMath::Sin(phi[i])
 
+    }
+    hPtSum->Fill(px_sum, py_sum);
     entry++;
 }
 
@@ -220,6 +234,27 @@ canv->SaveAs(picName);
 delete canv;
 delete leg;
 
+canv = new TCanvas();
+leg = new TLegend(0.7,0.7,0.9,0.9);
+hPtPolar->Draw("colz");
+hPtPolar->SetStats(false);
+sprintf(picName, "../results/Pt_polar.png");
+canv->SaveAs(picName);
+sprintf(picName, "../results/Pt_polar.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
+
+canv = new TCanvas();
+leg = new TLegend(0.7,0.7,0.9,0.9);
+hPtSum->Draw("colz");
+hPtSum->SetStats(false);
+sprintf(picName, "../results/Pt_sum.png");
+canv->SaveAs(picName);
+sprintf(picName, "../results/Pt_sum.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
 
 
 delete hMetaR;
@@ -234,6 +269,8 @@ delete hSecId;
 delete hPcorr; 
 delete hMassTOF;
 delete hMassRPC;
+delete hPtPolar;
+delete hPtSum;
 
 }
 
