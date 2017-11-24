@@ -1,6 +1,6 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Fri Nov 24 14:28:02 2017) by ROOT version5.34/34
+//=========  (Fri Nov 24 14:41:34 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
    c1->Range(-12.5,-963.7688,112.5,8673.919);
    c1->SetFillColor(0);
@@ -1928,9 +1928,7 @@
    hMetaDy->Draw("same");
    
    TLegend *leg = new TLegend(0.7,0.7,0.9,0.9,NULL,"brNDC");
-   leg->SetBorderSize(0);
-   leg->SetTextFont(38);
-   leg->SetTextSize(0.7);
+   leg->SetBorderSize(1);
    leg->SetLineColor(1);
    leg->SetLineStyle(1);
    leg->SetLineWidth(1);
@@ -1943,7 +1941,7 @@
    entry->SetMarkerColor(1);
    entry->SetMarkerStyle(1);
    entry->SetMarkerSize(1);
-   entry->SetTextFont(38);
+   entry->SetTextFont(42);
    entry=leg->AddEntry("hMetaDy","MetaDy","lp");
    entry->SetLineColor(3);
    entry->SetLineStyle(1);
@@ -1951,7 +1949,7 @@
    entry->SetMarkerColor(1);
    entry->SetMarkerStyle(1);
    entry->SetMarkerSize(1);
-   entry->SetTextFont(38);
+   entry->SetTextFont(42);
    leg->Draw();
    
    TPaveText *pt = new TPaveText(0.15,0.9339831,0.85,0.995,"blNDC");
