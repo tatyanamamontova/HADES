@@ -41,7 +41,7 @@ Float_t vZ;
 Float_t P;
 Float_t Delta;
 Float_t metaMass[maxNTracks];
-Float_t beta[maxNTracks];
+Float_t theta[maxNTracks];
 
 
 ch->SetBranchAddress("nTracks", &nTracks);
@@ -198,7 +198,7 @@ delete leg;
 canv = new TCanvas();
 leg = new TLegend(0.7,0.7,0.9,0.9);
 hMassRPC->SetLineColor(2);
-hMassTOF>SetLineColor(3);
+hMassTOF->SetLineColor(3);
 hMassRPC->SetStats(0);
 hMassTOF->SetStats(0);
 hMassRPC->Draw();
