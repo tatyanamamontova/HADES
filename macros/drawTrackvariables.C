@@ -91,7 +91,7 @@ leg = new TLegend(0.7,0.7,0.9,0.9);
 hMetaR->Draw();
 sprintf(picName, "../results/MetaR.png");
 canv->SaveAs(picName);
-sprintf(picName, "./results/MetaR.C");
+sprintf(picName, "../results/MetaR.C");
 canv->SaveAs(picName);
 delete canv;
 delete leg;
@@ -178,6 +178,17 @@ sprintf(picName, "../results/PCorr.C");
 canv->SaveAs(picName);
 delete canv;
 delete leg;
+
+delete hMetaR;
+delete  hMetaDx;
+delete  hMetaDy;
+delete  hChi2all;
+delete hChi2in;
+delete hChi2out;
+delete hDCAxy;
+delete hDCAz;
+delete hSecId;
+delete hPcorr; 
 
 }
 
