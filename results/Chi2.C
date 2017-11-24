@@ -1,6 +1,6 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Fri Nov 24 14:41:35 2017) by ROOT version5.34/34
+//=========  (Fri Nov 24 15:21:00 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
    c1->Range(-12.5,-4415.907,112.5,39743.16);
    c1->SetFillColor(0);
@@ -1182,7 +1182,9 @@
    hChi2in->Draw("same");
    
    TH1F *hChi2out = new TH1F("hChi2out","MDC outer segment fitter #chi^2",1000,0,100);
-   hChi2out->SetBinContent(1,1713171);
+   hChi2out->SetBinContent(0,163514);
+   hChi2out->SetBinContent(1,1267773);
+   hChi2out->SetBinContent(1001,281884);
    hChi2out->SetEntries(1713171);
    hChi2out->SetStats(0);
    hChi2out->SetLineColor(4);
