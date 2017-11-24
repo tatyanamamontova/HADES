@@ -89,15 +89,15 @@ while(entry < ch->GetEntries()) {
 }
 
 
-canv = new TCanvas();
-leg = new TLegend(0.7,0.7,0.9,0.9);
-hMetaR->Draw();
-sprintf(picName, "../results/MetaR.png");
-canv->SaveAs(picName);
-sprintf(picName, "./results/MetaR.C");
-canv->SaveAs(picName);
-delete canv;
-delete leg;
+// canv = new TCanvas();
+// leg = new TLegend(0.7,0.7,0.9,0.9);
+// hMetaR->Draw();
+// sprintf(picName, "../results/MetaR.png");
+// canv->SaveAs(picName);
+// sprintf(picName, "./results/MetaR.C");
+// canv->SaveAs(picName);
+// delete canv;
+// delete leg;
 
 canv = new TCanvas();
 hMetaDx->SetLineColor(2);
@@ -112,8 +112,8 @@ leg->SetFillColor(0);
 leg->SetBorderSize(0);
 leg->SetTextSize(0.03);
 leg->SetTextFont(38);
-leg->AddEntry("hMetaDx", "MetaDx", "l");
-leg->AddEntry("hMetaDy", "MetaDy", "l");
+leg->AddEntry(hMetaDx, "MetaDx", "l");
+leg->AddEntry(hMetaDy, "MetaDy", "l");
 leg->Draw();
 
 sprintf(picName, "../results/MetaDxy.png");
@@ -124,75 +124,75 @@ delete canv;
 delete leg;
 
 
-canv = new TCanvas();
-hChi2all->SetLineColor(2);
-hChi2in->SetLineColor(3);
-hChi2out->SetLineColor(4);
-hChi2all->SetStats(0);
-hChi2in->SetStats(0);
-hChi2out->SetStats(0);
-hChi2all->Draw();
-hChi2in->Draw("same");
-hChi2out->Draw("same");
+// canv = new TCanvas();
+// hChi2all->SetLineColor(2);
+// hChi2in->SetLineColor(3);
+// hChi2out->SetLineColor(4);
+// hChi2all->SetStats(0);
+// hChi2in->SetStats(0);
+// hChi2out->SetStats(0);
+// hChi2all->Draw();
+// hChi2in->Draw("same");
+// hChi2out->Draw("same");
 
-leg = new TLegend(0.1,0.7,0.48,0.9);
-leg->SetFillColor(0);
-leg->SetBorderSize(0);
-leg->SetTextSize(0.03);
-leg->SetTextFont(38);
-leg->AddEntry("hChi2all", "Chi2all", "l");
-leg->AddEntry("hChi2in", "Chi2inner", "l");
-leg->AddEntry("hChi2out", "Chi2out", "l");
-leg->Draw();
+// leg = new TLegend(0.1,0.7,0.48,0.9);
+// leg->SetFillColor(0);
+// leg->SetBorderSize(0);
+// leg->SetTextSize(0.03);
+// leg->SetTextFont(38);
+// leg->AddEntry(hChi2all, "Chi2all", "l");
+// leg->AddEntry(hChi2in, "Chi2inner", "l");
+// leg->AddEntry(hChi2out, "Chi2out", "l");
+// leg->Draw();
 
-sprintf(picName, "../results/Chi2.png");
-canv->SaveAs(picName);
-sprintf(picName, "../results/Chi2.C");
-canv->SaveAs(picName);
-delete canv;
-delete leg;
+// sprintf(picName, "../results/Chi2.png");
+// canv->SaveAs(picName);
+// sprintf(picName, "../results/Chi2.C");
+// canv->SaveAs(picName);
+// delete canv;
+// delete leg;
 
-canv = new TCanvas();
-leg = new TLegend(0.7,0.7,0.9,0.9);
-hDCAxy->Draw();
-sprintf(picName, "../results/DCAxy.png");
-canv->SaveAs(picName);
-sprintf(picName, "../results/DCAxy.C");
-canv->SaveAs(picName);
-delete canv;
-delete leg;
+// canv = new TCanvas();
+// leg = new TLegend(0.7,0.7,0.9,0.9);
+// hDCAxy->Draw();
+// sprintf(picName, "../results/DCAxy.png");
+// canv->SaveAs(picName);
+// sprintf(picName, "../results/DCAxy.C");
+// canv->SaveAs(picName);
+// delete canv;
+// delete leg;
 
-canv = new TCanvas();
-leg = new TLegend(0.7,0.7,0.9,0.9);
-hDCAz->Draw();
-sprintf(picName, "../results/DCAz.png");
-canv->SaveAs(picName);
-sprintf(picName, "../results/DCAz.C");
-canv->SaveAs(picName);
-delete canv;
-delete leg;
+// canv = new TCanvas();
+// leg = new TLegend(0.7,0.7,0.9,0.9);
+// hDCAz->Draw();
+// sprintf(picName, "../results/DCAz.png");
+// canv->SaveAs(picName);
+// sprintf(picName, "../results/DCAz.C");
+// canv->SaveAs(picName);
+// delete canv;
+// delete leg;
 
 
-canv = new TCanvas();
-leg = new TLegend(0.7,0.7,0.9,0.9);
-hSecId->Draw();
-sprintf(picName, "../results/SecId.png");
-canv->SaveAs(picName);
-sprintf(picName, "../results/SecID.C");
-canv->SaveAs(picName);
-delete canv;
-delete leg;
+// canv = new TCanvas();
+// leg = new TLegend(0.7,0.7,0.9,0.9);
+// hSecId->Draw();
+// sprintf(picName, "../results/SecId.png");
+// canv->SaveAs(picName);
+// sprintf(picName, "../results/SecID.C");
+// canv->SaveAs(picName);
+// delete canv;
+// delete leg;
 
-canv = new TCanvas();
-leg = new TLegend(0.7,0.7,0.9,0.9);
-hPcorr->Draw("colz");
-hPcorr->SetStats(false);
-sprintf(picName, "../results/PCorr.png");
-canv->SaveAs(picName);
-sprintf(picName, "../results/PCorr.C");
-canv->SaveAs(picName);
-delete canv;
-delete leg;
+// canv = new TCanvas();
+// leg = new TLegend(0.7,0.7,0.9,0.9);
+// hPcorr->Draw("colz");
+// hPcorr->SetStats(false);
+// sprintf(picName, "../results/PCorr.png");
+// canv->SaveAs(picName);
+// sprintf(picName, "../results/PCorr.C");
+// canv->SaveAs(picName);
+// delete canv;
+// delete leg;
 }
 
 
