@@ -1,6 +1,6 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Fri Nov 24 12:14:47 2017) by ROOT version5.34/34
+//=========  (Fri Nov 24 14:28:02 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
    c1->Range(-250,-0.0125,2250,0.1125);
    c1->SetFillColor(0);
@@ -9,7 +9,7 @@
    c1->SetFrameBorderMode(0);
    c1->SetFrameBorderMode(0);
    
-   TH2F *hPcorr = new TH2F("hPcorr","#frac{p-p_{corr}}{p} vs p",1000,0,2000,100,0,0.1);
+   TH2F *hPcorr = new TH2F("hPcorr","p-p_{corr} vs p",1000,0,2000,100,0,0.1);
    hPcorr->SetBinContent(25,2);
    hPcorr->SetBinContent(26,2);
    hPcorr->SetBinContent(27,3);
@@ -2027,13 +2027,13 @@ palette->SetTitleSize(0.035);
    hPcorr->GetZaxis()->SetTitleFont(42);
    hPcorr->Draw("colz");
    
-   TPaveText *pt = new TPaveText(0.4023563,0.8627966,0.5976437,0.995,"blNDC");
+   TPaveText *pt = new TPaveText(0.4023563,0.9288983,0.5976437,0.995,"blNDC");
    pt->SetName("title");
    pt->SetBorderSize(0);
    pt->SetFillColor(0);
    pt->SetFillStyle(0);
    pt->SetTextFont(42);
-   TText *text = pt->AddText("#frac{p-p_{corr}}{p} vs p");
+   TText *text = pt->AddText("p-p_{corr} vs p");
    pt->Draw();
    c1->Modified();
    c1->cd();

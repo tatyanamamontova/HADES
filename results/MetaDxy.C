@@ -1,6 +1,6 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Fri Nov 24 14:24:25 2017) by ROOT version5.34/34
+//=========  (Fri Nov 24 14:28:02 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
    c1->Range(-12.5,-963.7688,112.5,8673.919);
    c1->SetFillColor(0);
@@ -1930,7 +1930,7 @@
    TLegend *leg = new TLegend(0.7,0.7,0.9,0.9,NULL,"brNDC");
    leg->SetBorderSize(0);
    leg->SetTextFont(38);
-   leg->SetTextSize(0.03);
+   leg->SetTextSize(0.7);
    leg->SetLineColor(1);
    leg->SetLineStyle(1);
    leg->SetLineWidth(1);
