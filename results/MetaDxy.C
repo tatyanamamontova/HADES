@@ -1,6 +1,6 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Fri Nov 24 12:21:58 2017) by ROOT version5.34/34
+//=========  (Fri Nov 24 14:24:25 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
    c1->Range(-12.5,-963.7688,112.5,8673.919);
    c1->SetFillColor(0);
@@ -1927,7 +1927,7 @@
    hMetaDy->GetZaxis()->SetTitleFont(42);
    hMetaDy->Draw("same");
    
-   TLegend *leg = new TLegend(0.1,0.7,0.48,0.9,NULL,"brNDC");
+   TLegend *leg = new TLegend(0.7,0.7,0.9,0.9,NULL,"brNDC");
    leg->SetBorderSize(0);
    leg->SetTextFont(38);
    leg->SetTextSize(0.03);
@@ -1936,20 +1936,20 @@
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(1001);
-   TLegendEntry *entry=leg->AddEntry("hMetaDx","MetaDx","l");
+   TLegendEntry *entry=leg->AddEntry("hMetaDx","MetaDx","lp");
    entry->SetLineColor(2);
    entry->SetLineStyle(1);
    entry->SetLineWidth(1);
    entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(21);
+   entry->SetMarkerStyle(1);
    entry->SetMarkerSize(1);
    entry->SetTextFont(38);
-   entry=leg->AddEntry("hMetaDy","MetaDy","l");
+   entry=leg->AddEntry("hMetaDy","MetaDy","lp");
    entry->SetLineColor(3);
    entry->SetLineStyle(1);
    entry->SetLineWidth(1);
    entry->SetMarkerColor(1);
-   entry->SetMarkerStyle(21);
+   entry->SetMarkerStyle(1);
    entry->SetMarkerSize(1);
    entry->SetTextFont(38);
    leg->Draw();
