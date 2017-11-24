@@ -64,7 +64,7 @@ TH1F* hChi2out = new TH1F("hChi2out", "MDC outer segment fitter #chi^2; #chi^2; 
 TH1F* hDCAxy = new TH1F("hDCAxy", "Distance of closest point to beamline; r[mm]; nTracks", 100, -50, 50);
 TH1F* hDCAz = new TH1F("hDCAz", "Z coordinate of closest point to beamline - Zvertex[mm]; z-Vz[mm]; nTracks", 100, -50, 50);
 TH1F* hSecId = new TH1F("hSecId", "Sector information from MDC; nSector; nTracks", 6, -0.5, 5.5);
-TH2F* hPcorr = new TH2F("hPcorr", "p-p_{corr} vs p; p [Mev/c]; #Delta p [MeV/c]; nTracks", 100, 0, 2000, 100, -50, 50);
+TH2F* hPcorr = new TH2F("hPcorr", "Abs(p-p_{corr}) vs p; p [Mev/c]; #Delta p [MeV/c]; nTracks", 100, 0, 2000, 1000, 0, 100);
 
 
 int entry=0;
@@ -82,11 +82,8 @@ while(entry < ch->GetEntries()) {
         hDCAz->Fill(DCAz[i]-vZ);
         hSecId->Fill(mdcSecId[i]);
         P = p[i];
-        Delta = p[i]-pCorr[i];
+        Delta = TMath::Abs(p[i]-pCorr[i]);
         hPcorr->Fill(P, Delta);
-        std::cout << p[i] <<std::endl;
-        std::cout << Delta << std::endl;
-        std::cout << pCorr[i] << std::endl;
     }
 
     entry++;
