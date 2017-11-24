@@ -58,10 +58,10 @@ TH1F* hMetaDy = new TH1F("hMetaDy", "Distance in Y of the outer segment to the m
 TH1F* hChi2all = new TH1F("hChi2all", "Tracking #chi^2; #chi^2; nTracks", 1000, 0, 200);
 TH1F* hChi2in = new TH1F("hChi2in", "MDC inner segment fitter #chi^2; #chi^2; nTracks", 1000, 0, 200);
 TH1F* hChi2out = new TH1F("hChi2out", "MDC outer segment fitter #chi^2; #chi^2; nTracks", 1000, 0, 200);
-TH1F* hDCAxy = new TH1F("hDCAxy", "Distance of closest point to beamline; r[mm]; nTracks", 100, 0, 50);
-TH1F* hDCAz = new TH1F("hDCAxy", "Z coordinate of closest point to beamline - Zvertex[mm]; z-Vz[mm]; nTracks", 100, -50, 50);
+TH1F* hDCAxy = new TH1F("hDCAxy", "Distance of closest point to beamline; r[mm]; nTracks", 100, -50, 50);
+TH1F* hDCAz = new TH1F("hDCAz", "Z coordinate of closest point to beamline - Zvertex[mm]; z-Vz[mm]; nTracks", 100, -50, 50);
 TH1F* hSecId = new TH1F("hSecId", "Sector information from MDC; nSector; nTracks", 6, -0.5, 5.5);
-TH2F* hPcorr = new TH2F("hPcorr", "#frac{p-p_{corr}}{p} vs p; p [Mev/c]; #Delta p/p; nTracks", 1000, 0, 2000, 100, 0, 1);
+TH2F* hPcorr = new TH2F("hPcorr", "#frac{p-p_{corr}}{p} vs p; p [Mev/c]; #Delta p/p; nTracks", 1000, 0, 2000, 100, 0, 0.1);
 
 
 int entry=0;
@@ -103,14 +103,14 @@ hMetaDy->SetStats(0);
 hMetaDx->Draw();
 hMetaDy->Draw("same");
 
-leg = new TLegend(0.2,0.15,0.9,0.9);
+leg = new TLegend(0.1,0.7,0.48,0.9);
 leg->SetFillColor(0);
 leg->SetBorderSize(0);
 leg->SetTextSize(0.03);
 leg->SetTextFont(38);
 leg->AddEntry(hMetaDx, "MetaDx", "l");
 leg->AddEntry(hMetaDy, "MetaDy", "l");
-leg->Draw("same");
+leg->Draw();
 
 sprintf(picName, "../results/MetaDxy.png");
 canv->SaveAs(picName);
@@ -131,7 +131,7 @@ hChi2all->Draw();
 hChi2in->Draw("same");
 hChi2out->Draw("same");
 
-leg = new TLegend(0.2,0.15,0.9,0.9);
+leg = new TLegend(0.1,0.7,0.48,0.9);
 leg->SetFillColor(0);
 leg->SetBorderSize(0);
 leg->SetTextSize(0.03);
@@ -139,7 +139,7 @@ leg->SetTextFont(38);
 leg->AddEntry(hChi2all, "Chi2all", "l");
 leg->AddEntry(hChi2in, "Chi2inner", "l");
 leg->AddEntry(hChi2out, "Chi2out", "l");
-leg->Draw("same");
+leg->Draw();
 
 sprintf(picName, "../results/Chi2.png");
 canv->SaveAs(picName);

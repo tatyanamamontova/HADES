@@ -1,15 +1,15 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Fri Nov 24 11:51:50 2017) by ROOT version5.34/34
+//=========  (Fri Nov 24 11:59:22 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
-   c1->Range(-250,-0.125,2250,1.125);
+   c1->Range(-250,-0.0125,2250,0.1125);
    c1->SetFillColor(0);
    c1->SetBorderMode(0);
    c1->SetBorderSize(2);
    c1->SetFrameBorderMode(0);
    c1->SetFrameBorderMode(0);
    
-   TH2F *hPcorr = new TH2F("hPcorr","#frac{p-p_{corr}}{p} vs p",1000,0,2000,100,0,1);
+   TH2F *hPcorr = new TH2F("hPcorr","#frac{p-p_{corr}}{p} vs p",1000,0,2000,100,0,0.1);
    hPcorr->SetBinContent(25,2);
    hPcorr->SetBinContent(26,2);
    hPcorr->SetBinContent(27,3);
@@ -1995,7 +1995,7 @@
    hPcorr->SetContourLevel(18,525.6);
    hPcorr->SetContourLevel(19,554.8);
    
-   TPaletteAxis *palette = new TPaletteAxis(2012.5,0,2125,1,hPcorr);
+   TPaletteAxis *palette = new TPaletteAxis(2012.5,0,2125,0.1,hPcorr);
 palette->SetLabelColor(1);
 palette->SetLabelFont(42);
 palette->SetLabelOffset(0.005);

@@ -1,6 +1,6 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Fri Nov 24 11:51:50 2017) by ROOT version5.34/34
+//=========  (Fri Nov 24 11:59:21 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
    c1->Range(-25,-8764.876,225,78883.88);
    c1->SetFillColor(0);
@@ -1141,7 +1141,7 @@
    hChi2out->GetZaxis()->SetTitleFont(42);
    hChi2out->Draw("same");
    
-   TLegend *leg = new TLegend(0.2,0.15,0.9,0.9,NULL,"brNDC");
+   TLegend *leg = new TLegend(0.1,0.7,0.48,0.9,NULL,"brNDC");
    leg->SetBorderSize(0);
    leg->SetTextFont(38);
    leg->SetTextSize(0.03);
