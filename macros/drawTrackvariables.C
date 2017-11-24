@@ -40,6 +40,9 @@ Short_t mdcSecId[maxNTracks];
 Float_t vZ;
 Float_t P;
 Float_t Delta;
+Float_t metaMass[maxNTracks];
+Float_t beta[maxNTracks];
+
 
 ch->SetBranchAddress("nTracks", &nTracks);
 ch->SetBranchAddress("metaMatchRadius", metaMatchRadius);
@@ -53,6 +56,8 @@ ch->SetBranchAddress("mdcSecId", mdcSecId);
 ch->SetBranchAddress("pCorr", pCorr);
 ch->SetBranchAddress("p", p);
 ch->SetBranchAddress("vZ", &vZ);
+ch->SetBranchAddress("metaMass", metaMass);
+ch->SetBranchAddress("theta", theta);
 
 
 TH1F* hMetaR = new TH1F("hMetaR", "Distance of the outer segment to the meta hit ; r[mm];nTracks", 1000, 0, 100);
@@ -65,6 +70,10 @@ TH1F* hDCAxy = new TH1F("hDCAxy", "Distance of closest point to beamline; r[mm];
 TH1F* hDCAz = new TH1F("hDCAz", "Z coordinate of closest point to beamline - Zvertex[mm]; z-Vz[mm]; nTracks", 100, -50, 50);
 TH1F* hSecId = new TH1F("hSecId", "Sector information from MDC; nSector; nTracks", 6, -0.5, 5.5);
 TH2F* hPcorr = new TH2F("hPcorr", "Abs(p-p_{corr}) vs p; p [Mev/c]; #Delta p [MeV/c]; nTracks", 100, 0, 2000, 1000, 0, 100);
+TH1F* hMassTOF = new TH1F("hMassTOF", "Mass for TOF; mass [MeV/c^2]; nTracks", 4000, 0, 4000);
+TH1F* hMassRPC = new TH1F("hMassRPC", "Mass for RPC; mass [MeV/c^2]; nTracks", 4000, 0, 4000);
+
+
 
 
 int entry=0;
@@ -84,6 +93,8 @@ while(entry < ch->GetEntries()) {
         P = p[i];
         Delta = TMath::Abs(p[i]-pCorr[i]);
         hPcorr->Fill(P, Delta);
+        if (theta[i] == 1.2) hMassTOF->Fill(metaMass[i]);
+        if (theta[i] == 0.4) hMassRPC->Fill(metaMass[i]);
     }
 
     entry++;
@@ -183,6 +194,27 @@ canv->SaveAs(picName);
 delete canv;
 delete leg;
 
+
+canv = new TCanvas();
+leg = new TLegend(0.7,0.7,0.9,0.9);
+hMassRPC->SetLineColor(2);
+hMassTOF>SetLineColor(3);
+hMassRPC->SetStats(0);
+hMassTOF->SetStats(0);
+hMassRPC->Draw();
+hMassTOF->Draw("same");
+leg->AddEntry(hMassRPC, "Meta mass for TOF", "lp");
+leg->AddEntry(hMassTOF, "Meta mass for RPC", "lp");
+leg->Draw("same");
+sprintf(picName, "../results/MassMeta.png");
+canv->SaveAs(picName);
+sprintf(picName, "../results/MassMeta.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
+
+
+
 delete hMetaR;
 delete hMetaDx;
 delete hMetaDy;
@@ -193,6 +225,8 @@ delete hDCAxy;
 delete hDCAz;
 delete hSecId;
 delete hPcorr; 
+delete hMassTOF;
+delete hMassRPC;
 
 }
 
