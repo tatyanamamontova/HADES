@@ -1,6 +1,6 @@
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Mon Nov 27 14:39:05 2017) by ROOT version5.34/34
+//=========  (Mon Nov 27 14:53:27 2017) by ROOT version5.34/34
    TCanvas *c1 = new TCanvas("c1", "c1",0,0,700,500);
    c1->Range(-500,-1965.863,4500,17692.76);
    c1->SetFillColor(0);
@@ -8058,7 +8058,7 @@
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(1001);
-   TLegendEntry *entry=leg->AddEntry("hMassRPC","Meta mass for TOF","lp");
+   TLegendEntry *entry=leg->AddEntry("hMassRPC","Meta mass for RPC","lp");
    entry->SetLineColor(2);
    entry->SetLineStyle(1);
    entry->SetLineWidth(1);
@@ -8066,7 +8066,7 @@
    entry->SetMarkerStyle(1);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("hMassTOF","Meta mass for RPC","lp");
+   entry=leg->AddEntry("hMassTOF","Meta mass for TOF","lp");
    entry->SetLineColor(3);
    entry->SetLineStyle(1);
    entry->SetLineWidth(1);
