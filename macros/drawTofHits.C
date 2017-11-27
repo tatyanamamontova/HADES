@@ -57,18 +57,14 @@ hTOFPT3->Draw("same");
 
 
 
-leg = new TLegend(0.2,0.15,0.9,0.9);
-leg->SetFillColor(0);
-leg->SetBorderSize(0);
-leg->SetTextSize(0.03);
-leg->SetTextFont(42);
+leg = new TLegend(0.7,0.7,0.9,0.9);
 leg->AddEntry(hTOFPT2, "PT2", "l");
 leg->AddEntry(hTOFPT3, "PT3", "l");
 leg->Draw("same");
 
-sprintf(picName, "./pics/TOF.png");
+sprintf(picName, "../results/TOF.png");
 canv->SaveAs(picName);
-sprintf(picName, "./pics/TOF.C");
+sprintf(picName, "../results/TOF.C");
 canv->SaveAs(picName);
 delete canv;
 delete leg;
