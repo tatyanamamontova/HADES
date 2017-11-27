@@ -7,7 +7,7 @@ currentDir=$(pwd)
 jobscript=${currentDir}/jobScript.sh
 currentTime=$(date +"%b_%d_%k_%M" | tr -d ' ')
 configuration=${1}
-filelist=../lists/${configuration}
+filelist=${currentDir}/../lists/${configuration}
 outputdir=${currentDir}/../output/${currentTime}/${configuration}
 logdir=${currentDir}/../log/${currentTime}/${configuration}
 
@@ -26,7 +26,7 @@ else
     maxNumberOfRuns=${2}
 fi
 
-bash make.sh
+bash ./make.sh
 
 if [ ! -d $outputdir ]
 then
@@ -68,7 +68,7 @@ do
     else
         log_err=${logdir}/${prevrunnumber}.err
         log_out=${logdir}/${prevrunnumber}.out
-        command="sbatch --error=${log_err} --output=${log_out} ${jobscript} ${env} ${exe} ${runlist} ${outputdir}/tree_${prevrunnumber}.root -1 ${prevrunnumber}"
+        command="sbatch --error=${log_err} --output=${log_out} ${jobscript} ${env} ${exe} ${runlist} ${outputdir}/tree_${prevrunnumber}.root -1"
         echo " "
         echo "sbatch"
         echo "-error=${log_err} --output=${log_out}"
