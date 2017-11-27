@@ -108,14 +108,14 @@ while(entry < ch->GetEntries()) {
         Delta = TMath::Abs(p[i]-pCorr[i]);
         hPcorr->Fill(P, Delta);
         hMass->Fill(metaMass[i]);
-        std::cout << theta[i] <<std::endl;
-        if (theta[i] == 1.2) 
+        //std::cout << theta[i] <<std::endl;
+        if (1.2 < theta[i]< 1.3) 
             {
-                std::cout << theta[i] << "" << metaMass[i] <<std::endl;
+                //std::cout << theta[i] << "" << metaMass[i] <<std::endl;
                 hMassTOF->Fill(metaMass[i]);
             }
 
-        if (theta[i] == 0.4) hMassRPC->Fill(metaMass[i]);
+        if (0.4 < theta[i] < 0.5) hMassRPC->Fill(metaMass[i]);
         hPtPolar->Fill(pt[i]*TMath::Cos(phi[i]), pt[i]*TMath::Sin(phi[i]));
         px_sum =px_sum+pt[i]*TMath::Cos(phi[i]);
         py_sum =py_sum+pt[i]*TMath::Sin(phi[i]);
