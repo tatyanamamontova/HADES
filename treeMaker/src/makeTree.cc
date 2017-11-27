@@ -17,9 +17,9 @@
 #include "hphysicsconstants.h"
 #include "hwallhit.h"
 #include "walldef.h"
-#include <hruntimedb.h>
-#include <hrun.h>
-#include <heventheader.h>
+#include "hruntimedb.h"
+#include "hrun.h"
+#include "heventheader.h"
 
 #include "TString.h"
 #include "TROOT.h"
@@ -53,7 +53,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
 
     // list of all files with working sectors
     if(!isSimulation) loop.readSectorFileList("/lustre/nyx/hades/dst/apr12/gen8/sector_selection/FileListHadron.list",kFALSE,kFALSE);
-//if(!isSimulation) loop.readSectorFileList("/lustre/nyx/cbm/users/ogolosov/HADES/treeMaker/src/list_gen109_day108.txt",kFALSE,kFALSE);
+
     // reading input files and declaring containers
     Bool_t ret = kFALSE;
     if(infileList.Contains(",")){
