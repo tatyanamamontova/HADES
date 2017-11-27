@@ -250,7 +250,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("pt_corr",  pt_corr,  "pt_corr[nTracks]/F");
     tree->Branch("rapidity_corr", rapidity_corr,"rapidity_corr[nTracks]/F");
     tree->Branch("metaDx",   metaDx,    "metaDx[nTracks]/F");
-    tree->Branch("metaDy",   metaDx,    "metaDy[nTracks]/F");
+    tree->Branch("metaDy",   metaDy,    "metaDy[nTracks]/F");
     tree->Branch("mdcSecId", mdcSecId,  "mdcSecId[nTracks]/F");
     
 
