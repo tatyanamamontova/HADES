@@ -1,8 +1,9 @@
-# HADES
-## Scripts connected with HADES experiment
+## Scripts and macros to make and analyze trees for HADES experiment
 1. Directory «treeMaker»
-  * Directory «lists» contains lists of trees in Hades format (HTree).
+  * Directory «lists» contains lists of trees in Hades format (HTree)
+  
   * Directory «scripts»:
+  
     env.sh runs the install of root and HYDRA environment
     
     make.sh runs «make» for the source code makeTree.cc
@@ -10,7 +11,9 @@
     submitJobs.sh runs jobs which convert trees.
     
     jobScript.sh is used to display what happens when we run submitJobs.sh
-  * Directory «src»
+    
+  * Directory «src»:
+  
     makeTree.cc is used to convert trees 
     
     MHConstants.h contains different constants and enumerators
