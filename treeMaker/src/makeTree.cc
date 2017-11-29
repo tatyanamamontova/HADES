@@ -199,13 +199,21 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("cuts",             cuts,            TString::Format("cuts[%i]/O", nCuts));
    
     //FW Hits
-    tree->Branch("wallModuleIndex",     wallModuleIndex,        TString::Format("wallModuleIndex[%i]/S", maxNWallHits));
-    tree->Branch("wallHitTime",         wallHitTime,            TString::Format("wallHitTime[%i]/F", maxNWallHits));  
-    tree->Branch("wallHitCharge",       wallHitCharge,          TString::Format("wallHitCharge[%i]/F", maxNWallHits));
-    tree->Branch("wallHitDistance",     wallHitDistance,        TString::Format("wallHitDistance[%i]/F", maxNWallHits));
-    tree->Branch("wallHitRing",         wallHitRing,            TString::Format("wallHitRing[%i]/S", maxNWallHits));
-    tree->Branch("wallHitPhi",          wallHitPhi,             TString::Format("wallHitPhi[%i]/F", maxNWallHits));
-    tree->Branch("isWallHitOk",         isWallHitOk,            TString::Format("isWallHitOk[%i]/O", maxNWallHits));
+    tree->Branch("wallModuleIndex", wallModuleIndex, "wallModuleIndex[nWallHitsTot]/S");
+    tree->Branch("wallHitTime",     wallHitTime,     "wallHitTime[nWallHitsTot]/F");  
+    tree->Branch("wallHitCharge",   wallHitCharge,   "wallHitCharge[nWallHitsTot]/F");
+    tree->Branch("wallHitDistance", wallHitDistance, "wallHitDistance[nWallHitsTot]/F");
+    tree->Branch("wallHitRing",     wallHitRing,     "wallHitRing[nWallHitsTot]/S");
+    tree->Branch("wallHitPhi",      wallHitPhi,      "wallHitPhi[nWallHitsTot]/F");
+    tree->Branch("wallHitEta",      wallHitEta,      "wallHitEta[nWallHitsTot]/F");
+    tree->Branch("isWallHitOk",     isWallHitOk,     "isWallHitOk[nWallHitsTot]/O");
+    // tree->Branch("wallModuleIndex",     wallModuleIndex,        TString::Format("wallModuleIndex[%i]/S", maxNWallHits));
+    // tree->Branch("wallHitTime",         wallHitTime,            TString::Format("wallHitTime[%i]/F", maxNWallHits));  
+    // tree->Branch("wallHitCharge",       wallHitCharge,          TString::Format("wallHitCharge[%i]/F", maxNWallHits));
+    // tree->Branch("wallHitDistance",     wallHitDistance,        TString::Format("wallHitDistance[%i]/F", maxNWallHits));
+    // tree->Branch("wallHitRing",         wallHitRing,            TString::Format("wallHitRing[%i]/S", maxNWallHits));
+    // tree->Branch("wallHitPhi",          wallHitPhi,             TString::Format("wallHitPhi[%i]/F", maxNWallHits));
+    // tree->Branch("isWallHitOk",         isWallHitOk,            TString::Format("isWallHitOk[%i]/O", maxNWallHits));
     tree->Branch("wallChargeTot_mod",   wallChargeTot_mod,      TString::Format("wallChargeTot_mod[%i]/F", nModules));
     tree->Branch("wallChargeTot",       &wallChargeTot,         "wallChargeTot/F");
     tree->Branch("wallChargeTot_ring",  wallChargeTot_ring,     TString::Format("wallChargeTot_ring[%i]/F", nRings));
