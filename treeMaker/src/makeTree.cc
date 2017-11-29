@@ -209,7 +209,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     tree->Branch("wallChargeTot_mod",   wallChargeTot_mod,      TString::Format("wallChargeTot_mod[%i]/F", nModules));
     tree->Branch("wallChargeTot",       &wallChargeTot,         "wallChargeTot/F");
     tree->Branch("wallChargeTot_ring",  wallChargeTot_ring,     TString::Format("wallChargeTot_ring[%i]/F", nRings));
-    
+
     //MDC 
     tree->Branch("nTracks",  &nTracks,  "nTracks/S"); 
     tree->Branch("nProtons", &nProtons, "nProtons/S");
@@ -375,7 +375,14 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
             
             psi = wallHit->getPhi() * D2R;
             wallHitPhi[j] = psi;
-            
+
+
+
+            std::cout << "Ind" << wallModuleIndex[j] << std::endl;
+            std::cout << "Time" << wallHitTime[j] << std::endl;
+            std::cout << "Charge" << wallHitCharge[j] << std::endl;
+            std::cout << "ring" << ring << std::endl;
+            std::cout << "phi" << wallHitPhi[j] << std::endl;
             //cuts by B.Kardan
             hit_beta = wallHitDistance[j]/wallHitTime[j]/299.792458;
             if ( (ring<=4            && wallHitCharge[j]>80 && hit_beta>0.84 && hit_beta<1.) ||
