@@ -124,6 +124,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Float_t wallHitDistance[maxNWallHits];   //distance to FW module
     Short_t wallHitRing[maxNWallHits];       //wall ring of a hit
     Float_t wallHitPhi[maxNWallHits];        //phi angle of hit module in rad
+    Float_t wallHitEta[maxNWallHits];        //eta of FW hit
     Bool_t  isWallHitOk[maxNWallHits];       //output of hit cuts
     Float_t wallChargeTot;                   //total charge FW
     Float_t wallChargeTot_ring[nRings];      //FW rings charges (1-9)
@@ -353,6 +354,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
         Float_t psi;
         Short_t randomSubEvent;
         Float_t hit_beta;
+        Float_t thetaFW;
         //for A.Sadovsky method:
         //Int_t nA = 0;
         //Int_t nB = 0;
@@ -383,7 +385,8 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
             
             psi = wallHit->getPhi() * D2R;
             wallHitPhi[j] = psi;
-
+            thetaFW = wallHit->getTheta();
+            wallHitEta[j] = -TMath::Log(TMath::Tan(thetaFW/2));
 
 
             // std::cout << "Ind" << wallModuleIndex[j] << std::endl;
