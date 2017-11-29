@@ -98,7 +98,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
    
 
 
-    const Short_t nRings = 9;                // number of rings in FW
+    const Int_t nRings = 9;                // number of rings in FW
     Short_t nWallHitsTot;                    //total number of FW hits
     const Short_t nCuts = 8;                 //number of cuts for event
     const Int_t nModules = 304;              //number of modules in FW
@@ -117,7 +117,7 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
     Float_t runTime;                         //run time
    
     //FW hits
-    const Short_t maxNWallHits = 200;        //maximal number of FW hits
+    const Int_t maxNWallHits = 200;        //maximal number of FW hits
     Short_t wallModuleIndex[maxNWallHits];   //index of hit module
     Float_t wallHitTime[maxNWallHits];       //time of FW hit
     Float_t wallHitCharge[maxNWallHits];     //charge of FW hit
@@ -378,11 +378,11 @@ Int_t makeTree(TString infileList, TString outfile, Int_t nEvents=-1)
 
 
 
-            std::cout << "Ind" << wallModuleIndex[j] << std::endl;
-            std::cout << "Time" << wallHitTime[j] << std::endl;
-            std::cout << "Charge" << wallHitCharge[j] << std::endl;
-            std::cout << "ring" << ring << std::endl;
-            std::cout << "phi" << wallHitPhi[j] << std::endl;
+            // std::cout << "Ind" << wallModuleIndex[j] << std::endl;
+            // std::cout << "Time" << wallHitTime[j] << std::endl;
+            // std::cout << "Charge" << wallHitCharge[j] << std::endl;
+            // std::cout << "ring" << ring << std::endl;
+            // std::cout << "phi" << wallHitPhi[j] << std::endl;
             //cuts by B.Kardan
             hit_beta = wallHitDistance[j]/wallHitTime[j]/299.792458;
             if ( (ring<=4            && wallHitCharge[j]>80 && hit_beta>0.84 && hit_beta<1.) ||
