@@ -336,7 +336,7 @@ hTR->SetStats(kFALSE);
 hTR->Draw();
 sprintf(picName, "../results/hTR.png");
 canv->SaveAs(picName);
-sprintf(picName, "../results/hTR.C");
+sprintf(picName, "../results/hTRC.C");
 canv->SaveAs(picName);
 delete canv;
 delete leg;
