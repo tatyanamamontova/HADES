@@ -48,36 +48,36 @@ ch->SetBranchAddress("vY", &vY);
 ch->SetBranchAddress("vZ", &vZ);
 ch->SetBranchAddress("vChi2", &vChi2);
 
-TH2F* hTOFFWhits = new TH2F("hTOFFWhits", "TOF hits vs FW Hits", 100, 0, 100, 120, 0, 120);
-TH2F* hTOFFWhitsCut = new TH2F("hTOFFWhitsCut", "TOF hits vs FW Hits with cuts", 100, 0, 100, 120, 0, 120);
-TH2F* hTOFFWcharge = new TH2F("hTOFFWcharge", "TOF hits vs FW charge", 100, 0, 100, 500, 0, 500);
-TH2F* hTOFFWchargeCut = new TH2F("hTOFFWchargeCut", "TOF hits vs FW charge with cuts", 100, 0, 100, 500, 0, 500);
-TH2F* hTOFMDC = new TH2F("hTOFMDC", "TOF hits vs MDC tracks", 100, 0, 100, 0, 120);
-TH2F* hTOFMDCCut = new TH2F("hTOFMDCCut", "TOF hits vs MDC tracks with cuts", 100, 0, 100, 120, 0, 120);
-TH2F* hTOFRPC = new TH2F("hTOFRPC", "TOF hits vs RPC hits", 100, 0, 100, 150, 0, 150);
-TH2F* hTOFRPCCut = new TH2F("hTOFRPCCut", "TOF hits vs RPC hits with cuts", 100, 0, 100, 150, 0, 150);
+TH2F* hTOFFWhits = new TH2F("hTOFFWhits", "TOF hits vs FW Hits; Tof Hits; FW hits; nEntries", 100, 0, 100, 120, 0, 120);
+TH2F* hTOFFWhitsCut = new TH2F("hTOFFWhitsCut", "TOF hits vs FW Hits with cuts; TOF Hits; FW hits; nEntries", 100, 0, 100, 120, 0, 120);
+TH2F* hTOFFWcharge = new TH2F("hTOFFWcharge", "TOF hits vs FW charge; TOF hits; FW charge; nEntries", 100, 0, 100, 500, 0, 500);
+TH2F* hTOFFWchargeCut = new TH2F("hTOFFWchargeCut", "TOF hits vs FW charge with cuts; TOF hits; FW charge; nEntries", 100, 0, 100, 500, 0, 500);
+TH2F* hTOFMDC = new TH2F("hTOFMDC", "TOF hits vs MDC tracks; TOF hits; MDC tracks; nEntries", 100, 0, 100, 0, 120);
+TH2F* hTOFMDCCut = new TH2F("hTOFMDCCut", "TOF hits vs MDC tracks with cuts; TOF hits; MDC tracks; nEntries", 100, 0, 100, 120, 0, 120);
+TH2F* hTOFRPC = new TH2F("hTOFRPC", "TOF hits vs RPC hits; TOF hits; RPC hits; nEntries", 100, 0, 100, 150, 0, 150);
+TH2F* hTOFRPCCut = new TH2F("hTOFRPCCut", "TOF hits vs RPC hits with cuts; TOF hits; RPC hits; nEntries", 100, 0, 100, 150, 0, 150);
 
-TH2F* hFWhitscharge = new TH2F("hFWhitscharge", "FW hits vs FW charge ", 120, 0, 120, 500, 0, 500);
-TH2F* hFWhitschargeCut = new TH2F("hFWhitschargeCut", "FW hits vs FW charge cuts", 120, 0, 120, 500, 0, 500);
-TH2F* hFWhitsMDC = new TH2F("hFWhitsMDC", "FW hits vs MDC tracks", 120, 0, 120, 120, 0, 120);
-TH2F* hFWhitsMDCCut = new TH2F("hFWhitsMDCCut", "FW hits vs MDC tracks with cuts", 120, 0, 120, 120, 0, 120);
-TH2F* hFWhitsRPC = new TH2F("hFWhitsRPC", "FW hits vs RPC hits", 120, 0, 120, 150, 0, 150);
-TH2F* hFWhitsRPCCut = new TH2F("hFWhitsRPCCut", "FW hits vs RPC hits with cuts", 120, 0, 120, 150, 0, 150);
+TH2F* hFWhitscharge = new TH2F("hFWhitscharge", "FW hits vs FW charge; FW hits; FW charge; nEntries ", 120, 0, 120, 500, 0, 500);
+TH2F* hFWhitschargeCut = new TH2F("hFWhitschargeCut", "FW hits vs FW charge cuts; FW hits; FW charge; nEntries", 120, 0, 120, 500, 0, 500);
+TH2F* hFWhitsMDC = new TH2F("hFWhitsMDC", "FW hits vs MDC tracks; FW hits; MDC tracks; nEntries", 120, 0, 120, 120, 0, 120);
+TH2F* hFWhitsMDCCut = new TH2F("hFWhitsMDCCut", "FW hits vs MDC tracks with cuts; FW hits; MDC tracks; nEntries", 120, 0, 120, 120, 0, 120);
+TH2F* hFWhitsRPC = new TH2F("hFWhitsRPC", "FW hits vs RPC hits; FW hits; RPC hits; nEntries", 120, 0, 120, 150, 0, 150);
+TH2F* hFWhitsRPCCut = new TH2F("hFWhitsRPCCut", "FW hits vs RPC hits with cuts; FW hits; RPC hits; nEntries", 120, 0, 120, 150, 0, 150);
 
-TH2F* hFWchargeMDC = new TH2F("hFWchargeMDC", "FW charge vs MDC tracks", 500, 0, 500, 120, 0, 120);
-TH2F* hFWchargeMDCCut = new TH2F("hFWchargeMDCCut", "FW charge vs MDC tracks with cuts", 500, 0, 500, 120, 0, 120);
-TH2F* hFWchargeRPC = new TH2F("hFWchargeRPC", "FW charge vs RPC hits", 500, 0, 500, 150, 0, 150);
-TH2F* hFWchargeRPCCut = new TH2F("hFWchargeRPCCut", "FW charge vs RPC hits with cuts", 500, 0, 500, 150, 0, 150);
+TH2F* hFWchargeMDC = new TH2F("hFWchargeMDC", "FW charge vs MDC tracks; FW charge; MDC tracks; nEntries", 500, 0, 500, 120, 0, 120);
+TH2F* hFWchargeMDCCut = new TH2F("hFWchargeMDCCut", "FW charge vs MDC tracks with cuts; FW charge; MDC tracks; nEntries", 500, 0, 500, 120, 0, 120);
+TH2F* hFWchargeRPC = new TH2F("hFWchargeRPC", "FW charge vs RPC hits; FW charge; RPC hits; nEntries", 500, 0, 500, 150, 0, 150);
+TH2F* hFWchargeRPCCut = new TH2F("hFWchargeRPCCut", "FW charge vs RPC hits with cuts; FW charge; RPC hits; nEntries", 500, 0, 500, 150, 0, 150);
 
-TH2F* hMDCRPC = new TH2F("hMDCRPC", "MDC hits vs RPC hits", 120, 0, 120, 150, 0, 150);
-TH2F* hMDCRPCCut = new TH2F("hMDCRPCCut", "MDC hits vs RPC hits with cuts", 120, 0, 120, 150, 0, 150);
+TH2F* hMDCRPC = new TH2F("hMDCRPC", "MDC hits vs RPC hits; MDC hits; RPC hits; nEntries", 120, 0, 120, 150, 0, 150);
+TH2F* hMDCRPCCut = new TH2F("hMDCRPCCut", "MDC hits vs RPC hits with cuts; MDC hits; RPC hits; nEntries", 120, 0, 120, 150, 0, 150);
 
 
 
-int nEntries=ch->GetEntries();
+
 // Bool_t check;
-for (Int_t ientry =0; ientry < nEntries; i++) {
-    ch->GetEntry(ientry);
+while (entry < ch->GetEntries())
+    ch->GetEntry(entry);
     hTOFFWhits->Fill(nTofHitsCut, nWallHitsTot);
     hTOFFWcharge->Fill(nTofHitsCut, wallChargeTot);
     hTOFMDC->Fill(nTofHitsCut, nTracks);
@@ -89,23 +89,21 @@ for (Int_t ientry =0; ientry < nEntries; i++) {
     hFWchargeRPC->Fill(wallChargeTot, nRpcClustCut);
     hMDCRPC->Fill(nTracks, nRpcClustCut);
 
-    for (Int_t i = 0; i < nCuts; i++){
-        if(!cuts[i]) continue;
+    if (cuts[0] && cuts[1] && cuts[2] && cuts[3] && cuts[4] && cuts[5] && cuts[6] && cuts[7] &&
+        -60<vZ<0 && 0.5<vChi2<40 && TMath::Sqrt(vX*vX+vY*vY)<3)
+    {
+        hTOFFWhitsCut->Fill(nTofHitsCut, nWallHitsTot);
+        hTOFFWchargeCut->Fill(nTofHitsCut, wallChargeTot);
+        hTOFMDCCut->Fill(nTofHitsCut, nTracks);
+        hTOFRPCCut->Fill(nTofHitsCut, nRpcClustCut);
+        hFWhitschargeCut->Fill(nWallHitsTot, wallChargeTot);
+        hFWhitsMDCCut->Fill(nWallHitsTot, nTracks);
+        hFWhitsRPCCut->Fill(nWallHitsTot, nRpcClustCut);
+        hFWchargeMDCCut->Fill(wallChargeTot, nTracks);
+        hFWchargeRPCCut->Fill(wallChargeTot, nRpcClustCut);
+        hMDCRPCCut->Fill(nTracks, nRpcClustCut);
     }
-    if (vZ>0 || vZ <-60) continue;
-    if(vChi2 < 0.5 || vChi2 > 40) continue;
-    if (TMath::Sqrt(vX*vX+vY*vY)>3) continue;  
-
-    hTOFFWhitsCut->Fill(nTofHitsCut, nWallHitsTot);
-    hTOFFWchargeCut->Fill(nTofHitsCut, wallChargeTot);
-    hTOFMDCCut->Fill(nTofHitsCut, nTracks);
-    hTOFRPCCut->Fill(nTofHitsCut, nRpcClustCut);
-    hFWhitschargeCut->Fill(nWallHitsTot, wallChargeTot);
-    hFWhitsMDCCut->Fill(nWallHitsTot, nTracks);
-    hFWhitsRPCCut->Fill(nWallHitsTot, nRpcClustCut);
-    hFWchargeMDCCut->Fill(wallChargeTot, nTracks);
-    hFWchargeRPCCut->Fill(wallChargeTot, nRpcClustCut);
-    hMDCRPCCut->Fill(nTracks, nRpcClustCut);
+    entry++;
     
 }
 
