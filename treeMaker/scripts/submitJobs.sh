@@ -48,7 +48,7 @@ cp -r ${currentDir}/../src ${currentDir}/../output/${currentTime}/${configuratio
 cp ${currentDir}/../exeMakeTree ${currentDir}/../output/${currentTime}/${configuration}
 
 
-env=/cvmfs/hades.gsi.de/install/5.34.34/hydra2-4.9n/defall.sh   # environment script
+env=/cvmfs/hades.gsi.de/install/5.34.34/hydra2-4.9u/defall.sh   # environment script
 exe=${currentDir}/../output/${currentTime}/${configuration}/exeMakeTree             # executable
 numberOfRuns=0   # counter for part number
 
