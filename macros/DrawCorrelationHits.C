@@ -21,7 +21,7 @@ TLegend* leg;
 TChain *ch = new TChain;
 char picName[200];
 char trees[200];
-sprintf(trees, "%s.root/tree", input);
+sprintf(trees, "%s/tree", input);
 ch->Add(trees);
 
 const Short_t nCuts = 8;
@@ -74,9 +74,9 @@ TH2F* hMDCRPCCut = new TH2F("hMDCRPCCut", "MDC hits vs RPC hits with cuts; MDC h
 
 
 
-
+Int_t entry =0;
 // Bool_t check;
-while (entry < ch->GetEntries())
+while (entry < ch->GetEntries()){
     ch->GetEntry(entry);
     hTOFFWhits->Fill(nTofHitsCut, nWallHitsTot);
     hTOFFWcharge->Fill(nTofHitsCut, wallChargeTot);
@@ -90,7 +90,7 @@ while (entry < ch->GetEntries())
     hMDCRPC->Fill(nTracks, nRpcClustCut);
 
     if (cuts[0] && cuts[1] && cuts[2] && cuts[3] && cuts[4] && cuts[5] && cuts[6] && cuts[7] &&
-        -60<vZ<0 && 0.5<vChi2<40 && TMath::Sqrt(vX*vX+vY*vY)<3)
+        vZ<0 && vZ > -60 && 0.5<vChi2 && vChi2<40 && TMath::Sqrt(vX*vX+vY*vY)<3)
     {
         hTOFFWhitsCut->Fill(nTofHitsCut, nWallHitsTot);
         hTOFFWchargeCut->Fill(nTofHitsCut, wallChargeTot);
