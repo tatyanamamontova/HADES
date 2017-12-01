@@ -72,7 +72,7 @@ TH2F* hFWchargeRPCCut = new TH2F("hFWchargeRPCCut", "FW charge vs RPC hits with 
 TH2F* hMDCRPC = new TH2F("hMDCRPC", "MDC hits vs RPC hits; MDC hits; RPC hits; nEntries", 120, 0, 120, 150, 0, 150);
 TH2F* hMDCRPCCut = new TH2F("hMDCRPCCut", "MDC hits vs RPC hits with cuts; MDC hits; RPC hits; nEntries", 120, 0, 120, 150, 0, 150);
 
-
+TH1F* hTR = new TH1F("hTR", "TOF hits + RPC hits with cuts", 250, 0, 250);
 
 Int_t entry =0;
 // Bool_t check;
@@ -102,6 +102,7 @@ while (entry < ch->GetEntries()){
         hFWchargeMDCCut->Fill(wallChargeTot, nTracks);
         hFWchargeRPCCut->Fill(wallChargeTot, nRpcClustCut);
         hMDCRPCCut->Fill(nTracks, nRpcClustCut);
+        hTR->Fill(nTofHitsCut+nRpcClustCut);
     }
     entry++;
     
@@ -324,6 +325,18 @@ hMDCRPCCut->Draw("colz");
 sprintf(picName, "../results/hMDCRPCCut.png");
 canv->SaveAs(picName);
 sprintf(picName, "../results/hMDCRPCCut.C");
+canv->SaveAs(picName);
+delete canv;
+delete leg;
+
+
+canv = new TCanvas();
+leg = new TLegend(0.7,0.7,0.9,0.9);
+hTR->SetStats(kFALSE);
+hTR->Draw();
+sprintf(picName, "../results/hTR.png");
+canv->SaveAs(picName);
+sprintf(picName, "../results/hTR.C");
 canv->SaveAs(picName);
 delete canv;
 delete leg;
